@@ -15,6 +15,8 @@ export async function generatePDF(standees: Standee[], paper: PaperSettings) {
     // Debug: Draw margins?
     // doc.rect(paper.margins.left, paper.margins.top, width - paper.margins.left - paper.margins.right, height - paper.margins.top - paper.margins.bottom);
 
+    const pageHeight = paper.height;
+
     for (const standee of standees) {
         // Load image once per standee type
         const imgParams = await loadImage(standee.imageSrc);
@@ -23,8 +25,20 @@ export async function generatePDF(standees: Standee[], paper: PaperSettings) {
             // Draw logic must match Standee.svelte
 
             // instance.x and instance.y are top-left of the wrapper
+            // instance.y includes page offset (e.g. 0, 297, 594...)
+
+            // Determine Page
+            const pageIndex = Math.floor(instance.y / pageHeight);
+
+            // Ensure we have enough pages
+            // jsPDF pages are 1-indexed. getNumberOfPages() returns current count.
+            while (doc.getNumberOfPages() <= pageIndex) {
+                doc.addPage();
+            }
+            doc.setPage(pageIndex + 1);
+
             const x = instance.x;
-            const y = instance.y;
+            const y = instance.y % pageHeight; // Local Y on the specific page
 
             // Dimensions
             const heightMm = standee.height;

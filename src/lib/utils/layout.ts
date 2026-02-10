@@ -27,6 +27,8 @@ export function autoLayout(standees: Standee[], paper: PaperSettings): Standee[]
 
     // Let's just place them in order for now.
 
+    let pageOffsetY = 0; // The Y offset for the current page
+
     for (const standee of newStandees) {
         const instances: StandeeInstance[] = [];
 
@@ -50,9 +52,11 @@ export function autoLayout(standees: Standee[], paper: PaperSettings): Standee[]
 
             // Check if fits on page vertical
             if (currentY + totalHeight > contentHeight) {
-                // Overflow! 
-                // For now, let's just place it off-canvas or stop?
-                // Or maybe just place it anyway and let user see it's outside
+                // Overflow! Move to next page
+                pageOffsetY += paper.height;
+                currentY = 0;
+                currentX = 0;
+                rowHeight = 0;
             }
 
             // Create instance
@@ -69,13 +73,40 @@ export function autoLayout(standees: Standee[], paper: PaperSettings): Standee[]
             if (standee.tokenSettings) {
                 if (standee.tokenSettings.mode === 'alphabetic') {
                     // Alphabetic: A, B, C... Z, AA, AB... 
-                    // Or simple A-Z? User asked for "start the array from E".
-                    // Let's assume sequential char codes for start.
-                    // If complex excel style is needed, we'd need a helper.
-                    // Simple char code offset:
-                    const startChar = standee.tokenSettings.startValue.toUpperCase();
-                    const startCode = startChar.charCodeAt(0) || 65; // default A
-                    tokenText = String.fromCharCode(startCode + i);
+                    // Robust implementation that treats startValue as a base index.
+
+                    const startVal = standee.tokenSettings.startValue || 'A';
+
+                    // 1. Convert startVal to a numeric index (0-based)
+                    let startIndex = 0;
+
+                    if (!isNaN(parseInt(startVal))) {
+                        // User input a number "1" -> treat as 0 ("A")
+                        startIndex = Math.max(0, parseInt(startVal) - 1);
+                    } else {
+                        // Parse letters to index (base 26)
+                        const s = startVal.toUpperCase();
+                        for (let k = 0; k < s.length; k++) {
+                            const charCode = s.charCodeAt(k);
+                            if (charCode >= 65 && charCode <= 90) {
+                                startIndex = startIndex * 26 + (charCode - 64);
+                            }
+                        }
+                        startIndex -= 1; // 1-based to 0-based
+                        if (startIndex < 0) startIndex = 0;
+                    }
+
+                    // 2. Add 'i' (current instance index)
+                    let targetIndex = startIndex + i;
+
+                    // 3. Convert targetIndex back to Excel-style string
+                    tokenText = '';
+                    do {
+                        const remainder = targetIndex % 26;
+                        tokenText = String.fromCharCode(remainder + 65) + tokenText;
+                        targetIndex = Math.floor(targetIndex / 26) - 1;
+                    } while (targetIndex >= 0);
+
                 } else {
                     // Numeric: Start + i
                     const startNum = parseInt(standee.tokenSettings.startValue) || 1;
@@ -99,7 +130,7 @@ export function autoLayout(standees: Standee[], paper: PaperSettings): Standee[]
             instances.push({
                 id: existingInstance?.id || uuidv4(),
                 x: currentX + paper.margins.left, // Absolute position on paper
-                y: currentY + paper.margins.top,
+                y: pageOffsetY + currentY + paper.margins.top,
                 token
             });
 
