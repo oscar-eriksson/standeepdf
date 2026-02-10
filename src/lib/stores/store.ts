@@ -6,6 +6,7 @@ export interface PaperSettings {
     height: number; // mm
     margins: { top: number; right: number; bottom: number; left: number }; // mm
     gridEnabled: boolean;
+    orientation: 'p' | 'l'; // 'p' = portrait, 'l' = landscape
 }
 
 export interface Standee {
@@ -53,6 +54,7 @@ const initialPaperSettings: PaperSettings = {
     height: 297,
     margins: { top: 3, right: 3, bottom: 3, left: 3 },
     gridEnabled: true,
+    orientation: 'p',
 };
 
 const initialUIState: UIState = {
@@ -69,7 +71,14 @@ const STORAGE_KEY_STANDEES = 'standeeApp_standees';
 const storedPaper = localStorage.getItem(STORAGE_KEY_PAPER);
 const storedStandees = localStorage.getItem(STORAGE_KEY_STANDEES);
 
-const startPaperSettings: PaperSettings = storedPaper ? JSON.parse(storedPaper) : initialPaperSettings;
+const startPaperSettings: PaperSettings = storedPaper ? (() => {
+    const parsed = JSON.parse(storedPaper);
+    // Migration: ensure orientation is set if missing
+    if (!parsed.orientation) {
+        parsed.orientation = parsed.width > parsed.height ? 'l' : 'p';
+    }
+    return parsed;
+})() : initialPaperSettings;
 const startStandees: Standee[] = storedStandees ? JSON.parse(storedStandees) : [];
 
 export const paperSettings = writable<PaperSettings>(startPaperSettings);

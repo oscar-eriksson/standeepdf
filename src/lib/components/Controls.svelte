@@ -25,6 +25,33 @@
       standees.update(s => autoLayout(s, $paperSettings));
   }
 
+  function setOrientation(o: 'p' | 'l') {
+      paperSettings.update(p => {
+          // Robust logic: ensure dimensions match the requested orientation
+          // Portrait: Height > Width
+          // Landscape: Width > Height
+          
+          const isLandscape = p.width > p.height;
+          const targetIsLandscape = o === 'l';
+          
+          if (isLandscape === targetIsLandscape) {
+               // Already in correct aspect ratio, just ensure orientation tag matches
+               if (p.orientation !== o) return { ...p, orientation: o };
+               return p;
+          }
+          
+          // Need to swap
+          return {
+              ...p,
+              orientation: o,
+              width: p.height,
+              height: p.width
+          };
+      });
+      // Allow store update to propagate then layout
+      setTimeout(() => triggerLayout(), 10);
+  }
+
   // --- Image Upload ---
   let fileInput: HTMLInputElement;
 
@@ -252,6 +279,23 @@
           <option value="A4">A4</option>
           <!-- Future: US Letter -->
         </select>
+      </div>
+      <div class="control-group">
+          <label>Orientation</label>
+          <div class="grid-2">
+            <button 
+                class="orientation-btn"
+                class:selected={$paperSettings.orientation === 'p' || (!$paperSettings.orientation && $paperSettings.height > $paperSettings.width)} 
+                on:click={() => setOrientation('p')}>
+                Portrait
+            </button>
+            <button 
+                class="orientation-btn"
+                class:selected={$paperSettings.orientation === 'l' || (!$paperSettings.orientation && $paperSettings.width > $paperSettings.height)} 
+                on:click={() => setOrientation('l')}>
+                Landscape
+            </button>
+          </div>
       </div>
       <div class="control-group">
         <label>Margins (mm)</label>
@@ -545,5 +589,25 @@
   .presets button {
       padding: 4px 8px;
       font-size: 0.8em;
+  }
+
+  .orientation-btn {
+      padding: 0.5rem;
+      background: white;
+      border: 1px solid #ccc;
+      color: #333;
+      cursor: pointer;
+      font-weight: 500;
+      transition: all 0.2s;
+  }
+  
+  .orientation-btn.selected {
+      background: var(--primary-color); /* Use theme color */
+      color: white;
+      border-color: var(--primary-color);
+  }
+  
+  .orientation-btn:hover:not(.selected) {
+      background: #f0f0f0;
   }
 </style>

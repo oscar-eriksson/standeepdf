@@ -4,7 +4,7 @@ import { mmToPx } from './units'; // Actually we need mm values for PDF
 
 export async function generatePDF(standees: Standee[], paper: PaperSettings) {
     const doc = new jsPDF({
-        orientation: 'p',
+        orientation: paper.orientation || 'p',
         unit: 'mm',
         format: 'a4' // Assume A4 for now as per key requirement
     });
