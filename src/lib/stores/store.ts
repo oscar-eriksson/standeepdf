@@ -11,7 +11,8 @@ export interface PaperSettings {
 
 export interface Standee {
   id: string;
-  imageSrc: string; // Data URL or Blob URL
+  imageSrc: string; // Current edited Data URL or Blob URL
+  initialImageSrc?: string; // Original virgin upload
   originalWidth: number;
   originalHeight: number;
   height: number; // Desired height in mm
@@ -23,7 +24,9 @@ export interface Standee {
     startValue: string; // "1" or "A"
   };
   rulerEnabled?: boolean;
-  rulerOffset?: number; // mm from left edge of standee wrapper
+  rulerOffset?: number; // Distance from left (v) or top (h) edge in mm
+  rulerOrientation?: 'vertical' | 'horizontal';
+  rulerFullWidth?: boolean;
   instances: StandeeInstance[];
 }
 

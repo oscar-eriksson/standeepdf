@@ -43,9 +43,11 @@ button {
   cursor: pointer;
   transition: border-color 0.25s;
 }
+
 button:hover {
   border-color: #646cff;
 }
+
 button:focus,
 button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
@@ -56,10 +58,84 @@ button:focus-visible {
     color: #213547;
     background-color: #ffffff;
   }
+
   a:hover {
     color: #747bff;
   }
+
   button {
     background-color: #f9f9f9;
   }
+}
+
+/* Shared UI Utilities */
+.control-group {
+  margin-bottom: 1.5rem;
+}
+
+.control-label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #555;
+}
+
+.grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.efficiency-stat {
+  font-size: 0.75em;
+  opacity: 0.8;
+  margin-top: 4px;
+}
+
+input[type='number'],
+input[type='text'],
+select {
+  width: 100%;
+  padding: 0.6rem;
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  background: white;
+  color: #333;
+  font-size: 0.9rem;
+  transition: border-color 0.2s;
+}
+
+input:focus,
+select:focus {
+  outline: none;
+  border-color: var(--primary-color);
+}
+
+button {
+  padding: 0.6rem 1rem;
+  font-size: 0.9rem;
+  border-radius: 6px;
+  transition: all 0.2s;
+}
+
+button.primary {
+  background-color: var(--primary-color);
+  color: white;
+}
+
+button.danger {
+  background-color: #ff4444;
+  color: white;
+  border-color: #cc0000;
+}
+
+button.danger:hover {
+  background-color: #ff2222;
+}
+
+.sub-controls {
+  margin-top: 10px;
+  padding-left: 15px;
+  border-left: 2px solid var(--border-color);
 }

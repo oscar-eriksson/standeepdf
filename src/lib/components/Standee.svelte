@@ -80,8 +80,13 @@
   }
 
   function updateRulerOffset(newOffset: number) {
-    const totalWidthMm = pxToMm(totalWidthPx);
-    const constrainedOffset = Math.max(-20, Math.min(newOffset, totalWidthMm));
+    const isHorizontal = standee.rulerOrientation === 'horizontal';
+    const maxDim = isHorizontal ? pxToMm(totalHeightPx) : pxToMm(totalWidthPx);
+    const rulerThicknessMm = pxToMm(25); // Ruler thickness is 25px in CSS
+    const constrainedOffset = Math.max(
+      -10,
+      Math.min(newOffset, maxDim - (isHorizontal ? 0 : rulerThicknessMm)),
+    );
 
     standees.update((all) =>
       all.map((s) => {
@@ -95,13 +100,15 @@
 
   function handleRulerMouseDown(e: MouseEvent) {
     e.stopPropagation();
-    const startX = e.clientX;
-    const initialOffset = standee.rulerOffset || -5; // Default -5mm (outside left)
+    const isHorizontal = standee.rulerOrientation === 'horizontal';
+    const startPos = isHorizontal ? e.clientY : e.clientX;
+    const initialOffset = standee.rulerOffset ?? (isHorizontal ? 0 : -5);
 
     function onMouseMove(e: MouseEvent) {
-      const dxPx = e.clientX - startX;
-      const dxMm = pxToMm(dxPx);
-      updateRulerOffset(initialOffset + dxMm);
+      const currentPos = isHorizontal ? e.clientY : e.clientX;
+      const dPx = currentPos - startPos;
+      const dMm = pxToMm(dPx);
+      updateRulerOffset(initialOffset + dMm);
     }
 
     function onMouseUp() {
@@ -191,22 +198,36 @@
   <!-- Visual Ruler -->
   {#if showRuler}
     <div
-      class="visual-ruler"
+      class="visual-ruler {standee.rulerOrientation || 'vertical'}"
       role="button"
       aria-label="Move Ruler"
       tabindex="0"
       on:mousedown={handleRulerMouseDown}
       on:keydown={(e) => {
-        if (e.key === 'ArrowLeft') updateRulerOffset((standee.rulerOffset || -5) - 1);
-        if (e.key === 'ArrowRight') updateRulerOffset((standee.rulerOffset || -5) + 1);
+        if (standee.rulerOrientation === 'horizontal') {
+          if (e.key === 'ArrowUp') updateRulerOffset((standee.rulerOffset || 0) - 1);
+          if (e.key === 'ArrowDown') updateRulerOffset((standee.rulerOffset || 0) + 1);
+        } else {
+          if (e.key === 'ArrowLeft') updateRulerOffset((standee.rulerOffset || -5) - 1);
+          if (e.key === 'ArrowRight') updateRulerOffset((standee.rulerOffset || -5) + 1);
+        }
       }}
-      style="height: {heightPx}px; bottom: {heightPx +
-        feetMarginPx +
-        imageMarginPx}px; left: {mmToPx(standee.rulerOffset || -5)}px; cursor: ew-resize;"
+      style="
+        {standee.rulerOrientation === 'horizontal'
+        ? `width: ${standee.rulerFullWidth ? totalWidthPx : widthPx}px; height: 25px; top: ${mmToPx(standee.rulerOffset || 10)}px; left: ${standee.rulerFullWidth ? 0 : imageMarginPx}px; cursor: ns-resize;`
+        : `height: ${heightPx}px; bottom: ${heightPx + feetMarginPx + imageMarginPx}px; left: ${mmToPx(standee.rulerOffset || -10)}px; cursor: ew-resize;`}
+        background: {standee.rulerOrientation === 'horizontal'
+        ? `linear-gradient(to bottom, transparent ${Math.max(0, -mmToPx(standee.rulerOffset || 10))}px, rgba(255, 255, 255, 0.6) ${Math.max(0, -mmToPx(standee.rulerOffset || 10))}px)`
+        : `linear-gradient(to right, transparent ${Math.max(0, -mmToPx(standee.rulerOffset || -10))}px, rgba(255, 255, 255, 0.6) ${Math.max(0, -mmToPx(standee.rulerOffset || -10))}px)`};
+      "
     >
       <div class="ruler-line"></div>
       <div class="ruler-ticks"></div>
-      <div class="ruler-label">{standee.height}mm</div>
+      <div class="ruler-label">
+        {standee.rulerOrientation === 'horizontal'
+          ? Math.round(pxToMm(standee.rulerFullWidth ? totalWidthPx : widthPx))
+          : standee.height}mm
+      </div>
     </div>
   {/if}
 </div>
@@ -307,27 +328,49 @@
 
   .visual-ruler {
     position: absolute;
-    width: 25px;
     display: flex;
+    z-index: 100;
+    border-radius: 2px;
+  }
+
+  .visual-ruler.vertical {
+    width: 25px;
     flex-direction: column;
     justify-content: center;
-    z-index: 100;
-    background: rgba(255, 255, 255, 0.6);
-    backdrop-filter: blur(2px);
-    border-radius: 2px;
+  }
+
+  .visual-ruler.horizontal {
+    height: 25px;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
   }
 
   .ruler-line {
     position: absolute;
+    background: #333;
+  }
+
+  .vertical .ruler-line {
     right: 0;
     top: 0;
     bottom: 0;
     width: 2px;
-    background: #333;
+  }
+
+  .horizontal .ruler-line {
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
   }
 
   .ruler-ticks {
     position: absolute;
+    background-repeat: repeat;
+  }
+
+  .vertical .ruler-ticks {
     right: 0;
     top: 0;
     bottom: 0;
@@ -342,35 +385,76 @@
     background-repeat: repeat-y;
   }
 
-  /* Cap lines at top/bottom */
+  .horizontal .ruler-ticks {
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 10px;
+    background-image:
+      linear-gradient(to right, #000 2px, transparent 2px),
+      linear-gradient(to right, #444 1px, transparent 1px);
+    background-size:
+      1cm 100%,
+      1mm 100%;
+    background-position: left;
+    background-repeat: repeat-x;
+  }
+
+  /* Cap lines at top/bottom/left/right */
   .visual-ruler::before,
   .visual-ruler::after {
     content: '';
     position: absolute;
+    background: #333;
+  }
+
+  .vertical::before {
+    top: 0;
     right: 0;
     width: 12px;
     height: 2px;
-    background: #333;
   }
-  .visual-ruler::before {
-    top: 0;
-  }
-  .visual-ruler::after {
+  .vertical::after {
     bottom: 0;
+    right: 0;
+    width: 12px;
+    height: 2px;
+  }
+
+  .horizontal::before {
+    left: 0;
+    bottom: 0;
+    width: 2px;
+    height: 12px;
+  }
+  .horizontal::after {
+    right: 0;
+    bottom: 0;
+    width: 2px;
+    height: 12px;
   }
 
   .ruler-label {
     position: absolute;
-    top: 50%;
-    right: 14px;
-    transform: translateY(-50%);
     font-size: 12px;
     white-space: nowrap;
     font-weight: bold;
     color: #333;
     background: white;
-    padding: 0 2px;
+    padding: 0 4px;
     border-radius: 2px;
     box-shadow: 0 0 4px rgba(0, 0, 0, 0.1);
+  }
+
+  .vertical .ruler-label {
+    top: 50%;
+    right: 14px;
+    transform: translateY(-50%);
+  }
+
+  .horizontal .ruler-label {
+    left: 50%;
+    bottom: 14px;
+    transform: translateX(-50%);
   }
 </style>
