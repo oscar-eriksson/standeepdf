@@ -228,6 +228,10 @@
 {/if}
 
 <div class="controls-panel">
+  <div class="branding">
+      <img src="{import.meta.env.BASE_URL}logo.png" alt="Standee2PDF Logo" />
+      <h1>Standee2PDF</h1>
+  </div>
   <div class="tabs">
     {#each tabs as tab}
       <button 
@@ -410,6 +414,28 @@
     flex-direction: column;
     height: 100vh;
   }
+
+  .branding {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 1rem;
+      border-bottom: 1px solid var(--border-color);
+      background: #f8f9fa;
+  }
+
+  .branding img {
+      width: 80px;
+      height: 80px;
+      object-fit: contain;
+  }
+
+  .branding h1 {
+      font-size: 1rem;
+      font-weight: 600;
+      margin: 0;
+      color: #333;
+  }
   
   .tabs {
     display: flex;
@@ -425,6 +451,10 @@
     font-size: 0.9em;
     padding: 1rem 0.5rem;
     color: #666;
+  }
+
+  .tabs button:focus {
+    outline: none;
   }
   
   .tabs button.active {
