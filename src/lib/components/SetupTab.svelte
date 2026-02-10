@@ -22,9 +22,9 @@
 
   <div class="control-group">
     <span class="control-label">Orientation</span>
-    <div class="grid-2">
+    <div class="btn-group">
       <button
-        class="orientation-btn"
+        class="btn-toggle"
         class:selected={$paperSettings.orientation === 'p' ||
           (!$paperSettings.orientation && $paperSettings.height > $paperSettings.width)}
         on:click={() => onOrientationChange('p')}
@@ -35,7 +35,7 @@
         </div>
       </button>
       <button
-        class="orientation-btn"
+        class="btn-toggle"
         class:selected={$paperSettings.orientation === 'l' ||
           (!$paperSettings.orientation && $paperSettings.width > $paperSettings.height)}
         on:click={() => onOrientationChange('l')}
@@ -91,16 +91,4 @@
 </div>
 
 <style>
-  .orientation-btn {
-    text-align: center;
-    background: #f0f0f0;
-    border: 2px solid transparent;
-  }
-
-  .orientation-btn.selected {
-    border-color: var(--primary-color);
-    background: var(--panel-bg);
-    color: var(--primary-color);
-    font-weight: bold;
-  }
 </style>

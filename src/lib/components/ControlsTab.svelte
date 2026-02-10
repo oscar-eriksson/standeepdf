@@ -31,11 +31,27 @@
       value={selectedStandee.height}
       on:input={(e) => onUpdateStandee('height', +e.currentTarget.value)}
     />
-    <div class="presets">
-      <button on:click={() => onUpdateStandee('height', 25)}>Tiny</button>
-      <button on:click={() => onUpdateStandee('height', 38)}>Small</button>
-      <button on:click={() => onUpdateStandee('height', 50)}>Med</button>
-      <button on:click={() => onUpdateStandee('height', 75)}>Lrg</button>
+    <div class="btn-group" style="margin-top: 8px;">
+      <button
+        class="btn-toggle"
+        class:selected={selectedStandee.height === 25}
+        on:click={() => onUpdateStandee('height', 25)}>Tiny</button
+      >
+      <button
+        class="btn-toggle"
+        class:selected={selectedStandee.height === 38}
+        on:click={() => onUpdateStandee('height', 38)}>Small</button
+      >
+      <button
+        class="btn-toggle"
+        class:selected={selectedStandee.height === 50}
+        on:click={() => onUpdateStandee('height', 50)}>Med</button
+      >
+      <button
+        class="btn-toggle"
+        class:selected={selectedStandee.height === 75}
+        on:click={() => onUpdateStandee('height', 75)}>Lrg</button
+      >
     </div>
   </div>
 
@@ -84,15 +100,17 @@
     </label>
 
     {#if selectedStandee.rulerEnabled}
-      <div class="presets" style="margin-top: 8px;">
+      <div class="btn-group" style="margin-top: 8px;">
         <button
-          class:active={(selectedStandee.rulerOrientation || 'vertical') === 'vertical'}
+          class="btn-toggle"
+          class:selected={(selectedStandee.rulerOrientation || 'vertical') === 'vertical'}
           on:click={() => onUpdateStandee('rulerOrientation', 'vertical')}
         >
           Height (V)
         </button>
         <button
-          class:active={selectedStandee.rulerOrientation === 'horizontal'}
+          class="btn-toggle"
+          class:selected={selectedStandee.rulerOrientation === 'horizontal'}
           on:click={() => onUpdateStandee('rulerOrientation', 'horizontal')}
         >
           Width (H)
@@ -139,25 +157,4 @@
 </div>
 
 <style>
-  .presets {
-    display: flex;
-    gap: 5px;
-    margin-top: 8px;
-  }
-
-  .presets button {
-    flex: 1;
-    padding: 4px;
-    font-size: 0.75rem;
-    background: #f0f0f0;
-  }
-
-  .presets button:hover {
-    background: #e0e0e0;
-  }
-
-  .presets button.active {
-    background: var(--primary-color, #4a90e2);
-    color: white;
-  }
 </style>
