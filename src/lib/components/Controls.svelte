@@ -242,6 +242,48 @@
       
       uiState.update(s => ({ ...s, selectedStandeeId: null, activeTab: 'images' }));
   }
+
+  // --- efficiency calc ---
+  function calculateEfficiency(standees: import('../stores/store').Standee[], paper: import('../stores/store').PaperSettings): { numPages: number, ratio: string } {
+      // Calculate total standees
+      const totalStandees = standees.reduce((acc, s) => acc + s.quantity, 0);
+      if (totalStandees === 0) return { numPages: 0, ratio: '-' };
+
+      // Run layout
+      const layoutResult = autoLayout(standees, paper);
+      
+      // Calculate pages
+      let maxY = 0;
+      layoutResult.forEach(s => {
+          s.instances.forEach(i => {
+              const bottom = i.y + s.height + s.imageMargin + s.feetMargin;
+              if (bottom > maxY) maxY = bottom;
+          });
+      });
+      
+      const pageHeight = paper.height;
+      const numPages = pageHeight > 0 ? Math.max(1, Math.ceil(maxY / pageHeight)) : 1;
+      
+      return { numPages, ratio: (totalStandees / numPages).toFixed(1) };
+  }
+
+  $: efficiencyPortrait = (function() {
+      const p = $paperSettings;
+      // Force Portrait dims
+      const height = Math.max(p.width, p.height);
+      const width = Math.min(p.width, p.height);
+      const tempPaper = { ...p, width, height, orientation: 'p' as const };
+      return calculateEfficiency($standees, tempPaper);
+  })();
+
+  $: efficiencyLandscape = (function() {
+      const p = $paperSettings;
+      // Force Landscape dims
+      const width = Math.max(p.width, p.height);
+      const height = Math.min(p.width, p.height);
+      const tempPaper = { ...p, width, height, orientation: 'l' as const };
+      return calculateEfficiency($standees, tempPaper);
+  })();
 </script>
 
 <svelte:window on:paste={handlePaste} />
@@ -287,13 +329,15 @@
                 class="orientation-btn"
                 class:selected={$paperSettings.orientation === 'p' || (!$paperSettings.orientation && $paperSettings.height > $paperSettings.width)} 
                 on:click={() => setOrientation('p')}>
-                Portrait
+                <div>Portrait</div>
+                <div class="efficiency-stat">{efficiencyPortrait.numPages} pgs ({efficiencyPortrait.ratio}/pg)</div>
             </button>
             <button 
                 class="orientation-btn"
                 class:selected={$paperSettings.orientation === 'l' || (!$paperSettings.orientation && $paperSettings.width > $paperSettings.height)} 
                 on:click={() => setOrientation('l')}>
-                Landscape
+                <div>Landscape</div>
+                <div class="efficiency-stat">{efficiencyLandscape.numPages} pgs ({efficiencyLandscape.ratio}/pg)</div>
             </button>
           </div>
       </div>
@@ -609,5 +653,12 @@
   
   .orientation-btn:hover:not(.selected) {
       background: #f0f0f0;
+  }
+
+  .efficiency-stat {
+      font-size: 0.75em;
+      opacity: 0.8;
+      font-weight: normal;
+      margin-top: 2px;
   }
 </style>
