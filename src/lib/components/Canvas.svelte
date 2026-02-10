@@ -1,8 +1,8 @@
 <script lang="ts">
-  import { paperSettings, standees, uiState } from "../stores/store";
-  import { onMount } from "svelte";
-  import { mmToPx } from "../utils/units";
-  import Standee from "./Standee.svelte";
+  import { paperSettings, standees, uiState } from '../stores/store';
+  import { onMount } from 'svelte';
+  import { mmToPx } from '../utils/units';
+  import Standee from './Standee.svelte';
 
   let canvasContainer: HTMLDivElement;
 
@@ -47,10 +47,7 @@
     <!-- Render Page Breaks -->
     {#if numPages > 1}
       {#each Array(numPages - 1) as _, i}
-        <div
-          class="page-break"
-          style="top: {(i + 1) * heightPx}px; width: {widthPx}px;"
-        >
+        <div class="page-break" style="top: {(i + 1) * heightPx}px; width: {widthPx}px;">
           <span>Page {i + 2}</span>
         </div>
       {/each}
@@ -66,9 +63,7 @@
                 top: {i * heightPx + marginTopPx}px;
                 width: {widthPx - marginLeftPx - marginRightPx}px;
                 height: {heightPx - marginTopPx - marginBottomPx}px;
-                border: {$paperSettings.gridEnabled
-          ? '1px dashed #ccc'
-          : 'none'};
+                border: {$paperSettings.gridEnabled ? '1px dashed #ccc' : 'none'};
             "
       ></div>
     {/each}

@@ -1,47 +1,64 @@
-# Svelte + TS + Vite
+# Standee2PDF 🎨📏
 
-This template should help get you started developing with Svelte and TypeScript in Vite.
+A powerful, high-precision generator for tabletop gaming standees. Designed to make the transition from digital art to physical table as seamless and efficient as possible.
 
-## Recommended IDE Setup
+## 🚀 Key Features
 
-[VS Code](https://code.visualstudio.com/) + [Svelte](https://marketplace.visualstudio.com/items?itemName=svelte.svelte-vscode).
+- **Multi-page PDF Export**: Automatically handles large batches of standees across multiple A4 pages.
+- **Auto-Layout System**: Intelligently arranges standees to maximize paper usage and minimize waste.
+- **Smart Background Removal**: Built-in AI-powered background removal using [`@imgly/background-removal`](https://github.com/imgly/background-removal-js), allowing you to drop in any character art and get a clean standee instantly.
+- **Numbering & Lettering Tokens**: Easily manage identical miniatures with a configurable token system (numeric or alphabetic).
+- **Visual Height Ruler**: A draggable, semi-transparent ruler to verify the physical scale of your miniatures before printing.
+- **"Feet-to-Feet" Layout**: Optimized layout for easy folding and gluing, ensuring a symmetrical upright and mirrored side.
 
-## Need an official Svelte framework?
+## 🛠️ Development
 
-Check out [SvelteKit](https://github.com/sveltejs/kit#readme), which is also powered by Vite. Deploy anywhere with its serverless-first approach and adapt to various platforms, with out of the box support for TypeScript, SCSS, and Less, and easily-added support for mdsvex, GraphQL, PostCSS, Tailwind CSS, and more.
+### Local Setup
 
-## Technical considerations
+1. **Clone the repository**:
+   ```bash
+   git clone https://github.com/oscar-eriksson/standeepdf.git
+   cd standeepdf
+   ```
+2. **Install dependencies**:
+   ```bash
+   npm install
+   ```
+3. **Start the development server**:
+   ```bash
+   npm run dev
+   ```
 
-**Why use this over SvelteKit?**
+### Building for Production
 
-- It brings its own routing solution which might not be preferable for some users.
-- It is first and foremost a framework that just happens to use Vite under the hood, not a Vite app.
+To generate a production-ready bundle in the `dist` folder:
 
-This template contains as little as possible to get started with Vite + TypeScript + Svelte, while taking into account the developer experience with regards to HMR and intellisense. It demonstrates capabilities on par with the other `create-vite` templates and is a good starting point for beginners dipping their toes into a Vite + Svelte project.
-
-Should you later need the extended capabilities and extensibility provided by SvelteKit, the template has been structured similarly to SvelteKit so that it is easy to migrate.
-
-**Why `global.d.ts` instead of `compilerOptions.types` inside `jsconfig.json` or `tsconfig.json`?**
-
-Setting `compilerOptions.types` shuts out all other types not explicitly listed in the configuration. Using triple-slash references keeps the default TypeScript setting of accepting type information from the entire workspace, while also adding `svelte` and `vite/client` type information.
-
-**Why include `.vscode/extensions.json`?**
-
-Other templates indirectly recommend extensions via the README, but this file allows VS Code to prompt the user to install the recommended extension upon opening the project.
-
-**Why enable `allowJs` in the TS template?**
-
-While `allowJs: false` would indeed prevent the use of `.js` files in the project, it does not prevent the use of JavaScript syntax in `.svelte` files. In addition, it would force `checkJs: false`, bringing the worst of both worlds: not being able to guarantee the entire codebase is TypeScript, and also having worse typechecking for the existing JavaScript. In addition, there are valid use cases in which a mixed codebase may be relevant.
-
-**Why is HMR not preserving my local component state?**
-
-HMR state preservation comes with a number of gotchas! It has been disabled by default in both `svelte-hmr` and `@sveltejs/vite-plugin-svelte` due to its often surprising behavior. You can read the details [here](https://github.com/rixo/svelte-hmr#svelte-hmr).
-
-If you have state that's important to retain within a component, consider creating an external store which would not be replaced by HMR.
-
-```ts
-// store.ts
-// An extremely simple external store
-import { writable } from 'svelte/store'
-export default writable(0)
+```bash
+npm run build
 ```
+
+## 🧪 Testing
+
+The project uses **Cypress** for end-to-end testing to ensure critical flows like image processing and PDF generation are always working.
+
+- **Run Headless Tests**: `npm run test:e2e`
+- **Open Cypress UI**: `npm run cy:open`
+
+For more details on testing prerequisites and scenarios, see [TESTING.md](./TESTING.md).
+
+## 🛡️ Technical Considerations
+
+- **Frontend**: Svelte 5 + TypeScript + Vite.
+- **PDF Generation**: Powered by `jspdf`, working with raw pixel data to ensure maximum image quality without re-compression.
+- **Styling**: Vanilla CSS with modern features like glassmorphism and CSS variables for theming.
+
+## 🤖 AI Disclaimer
+
+This project utilizes AI in two primary ways:
+
+1.  **Development**: The codebase was developed collaboratively with **Antigravity**, an agentic AI coding assistant. While AI-assisted, all functionality has been verified and tested.
+2.  **Features**: The background removal feature leverages a neural network model (via [`@imgly/background-removal`](https://github.com/imgly/background-removal-js)) that runs entirely in your browser. No image data is sent to external servers.
+
+---
+
+_Built with Antigravity_

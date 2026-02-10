@@ -1,8 +1,8 @@
 <script lang="ts">
-  import type { Standee, StandeeInstance } from "../stores/store";
-  import { mmToPx, pxToMm } from "../utils/units";
-  import { createEventDispatcher } from "svelte";
-  import { standees, uiState } from "../stores/store";
+  import type { Standee, StandeeInstance } from '../stores/store';
+  import { mmToPx, pxToMm } from '../utils/units';
+  import { createEventDispatcher } from 'svelte';
+  import { standees, uiState } from '../stores/store';
 
   export let standee: Standee;
   export let instance: StandeeInstance;
@@ -71,12 +71,12 @@
     }
 
     function onMouseUp() {
-      window.removeEventListener("mousemove", onMouseMove);
-      window.removeEventListener("mouseup", onMouseUp);
+      window.removeEventListener('mousemove', onMouseMove);
+      window.removeEventListener('mouseup', onMouseUp);
     }
 
-    window.addEventListener("mousemove", onMouseMove);
-    window.addEventListener("mouseup", onMouseUp);
+    window.addEventListener('mousemove', onMouseMove);
+    window.addEventListener('mouseup', onMouseUp);
   }
 
   function updateRulerOffset(newOffset: number) {
@@ -105,12 +105,12 @@
     }
 
     function onMouseUp() {
-      window.removeEventListener("mousemove", onMouseMove);
-      window.removeEventListener("mouseup", onMouseUp);
+      window.removeEventListener('mousemove', onMouseMove);
+      window.removeEventListener('mouseup', onMouseUp);
     }
 
-    window.addEventListener("mousemove", onMouseMove);
-    window.addEventListener("mouseup", onMouseUp);
+    window.addEventListener('mousemove', onMouseMove);
+    window.addEventListener('mouseup', onMouseUp);
   }
 </script>
 
@@ -125,7 +125,6 @@
     top: {topPx}px;
     --image-margin: {imageMarginPx}px;
   "
-  on:mousedown={null}
 >
   <!-- 
     New Layout: Feet-to-Feet
@@ -142,7 +141,14 @@
     {#if instance.token?.enabled}
       <div
         class="token-overlay {instance.token.size}"
+        role="button"
+        tabindex="0"
         on:mousedown={(e) => handleTokenMouseDown(e, instance)}
+        on:keydown={(e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            handleTokenMouseDown(e as any, instance);
+          }
+        }}
         style="
                 background-color: {instance.token.bgColor};
                 color: {instance.token.textColor};
@@ -191,16 +197,12 @@
       tabindex="0"
       on:mousedown={handleRulerMouseDown}
       on:keydown={(e) => {
-        if (e.key === "ArrowLeft")
-          updateRulerOffset((standee.rulerOffset || -5) - 1);
-        if (e.key === "ArrowRight")
-          updateRulerOffset((standee.rulerOffset || -5) + 1);
+        if (e.key === 'ArrowLeft') updateRulerOffset((standee.rulerOffset || -5) - 1);
+        if (e.key === 'ArrowRight') updateRulerOffset((standee.rulerOffset || -5) + 1);
       }}
       style="height: {heightPx}px; bottom: {heightPx +
         feetMarginPx +
-        imageMarginPx}px; left: {mmToPx(
-        standee.rulerOffset || -5,
-      )}px; cursor: ew-resize;"
+        imageMarginPx}px; left: {mmToPx(standee.rulerOffset || -5)}px; cursor: ew-resize;"
     >
       <div class="ruler-line"></div>
       <div class="ruler-ticks"></div>
@@ -330,7 +332,8 @@
     top: 0;
     bottom: 0;
     width: 10px;
-    background-image: linear-gradient(to top, #000 2px, transparent 2px),
+    background-image:
+      linear-gradient(to top, #000 2px, transparent 2px),
       linear-gradient(to top, #444 1px, transparent 1px);
     background-size:
       100% 1cm,
@@ -342,7 +345,7 @@
   /* Cap lines at top/bottom */
   .visual-ruler::before,
   .visual-ruler::after {
-    content: "";
+    content: '';
     position: absolute;
     right: 0;
     width: 12px;
