@@ -2,6 +2,10 @@
 
 A powerful, high-precision generator for tabletop gaming standees. Designed to make the transition from digital art to physical table as seamless and efficient as possible.
 
+## 🌐 Live Demo
+
+Try it out here: [https://standee2pdf.oscr.se](https://standee2pdf.oscr.se)
+
 ## 🚀 Key Features
 
 - **Multi-page PDF Export**: Automatically handles large batches of standees across multiple A4 pages.
