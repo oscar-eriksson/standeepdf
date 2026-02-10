@@ -2,7 +2,7 @@ import { jsPDF } from 'jspdf';
 import type { Standee, PaperSettings } from '../stores/store';
 import { mmToPx } from './units'; // Actually we need mm values for PDF
 
-export async function generatePDF(standees: Standee[], paper: PaperSettings) {
+export async function generatePDF(standees: Standee[], paper: PaperSettings, action: 'download' | 'print' = 'download') {
     const doc = new jsPDF({
         orientation: paper.orientation || 'p',
         unit: 'mm',
@@ -157,14 +157,23 @@ export async function generatePDF(standees: Standee[], paper: PaperSettings) {
                 const mirrorTokenTopY = mirrorBoxBottom - cssOffset - customOffsetY - diameter;
 
                 // For the mirror token, we use the ROTATED image so it appears "flipped" (backwards/upside down).
-                // User said "mirror flipped" and "misaligned".
-                // Providing a version that is rotated 180 degrees (upside down and backwards).
                 doc.addImage(tokenImgData.rotated, 'PNG', tokenX, mirrorTokenTopY, diameter, diameter);
             }
         }
     }
 
-    doc.save('standees.pdf');
+    if (action === 'print') {
+        doc.autoPrint();
+        const blob = doc.output('blob');
+        const url = URL.createObjectURL(blob);
+        window.open(url, '_blank');
+    } else {
+        const now = new Date();
+        const dateStr = now.toISOString().split('T')[0];
+        const timeStr = now.toTimeString().split(' ')[0].replace(/:/g, '-').slice(0, 5);
+        const filename = `standees_${dateStr}_${timeStr}.pdf`;
+        doc.save(filename);
+    }
 }
 
 function getImageFormat(dataUrl: string): 'PNG' | 'JPEG' {

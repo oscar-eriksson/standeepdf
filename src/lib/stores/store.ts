@@ -22,6 +22,8 @@ export interface Standee {
         mode: 'numeric' | 'alphabetic';
         startValue: string; // "1" or "A"
     };
+    rulerEnabled?: boolean;
+    rulerOffset?: number; // mm from left edge of standee wrapper
     instances: StandeeInstance[];
 }
 
