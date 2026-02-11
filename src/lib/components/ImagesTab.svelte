@@ -2,6 +2,7 @@
   import { standees, uiState } from '../stores/store';
   import { createEventDispatcher } from 'svelte';
 
+  import Card from '../ui/Card.svelte';
   const dispatch = createEventDispatcher();
   let fileInput: HTMLInputElement;
 
@@ -19,109 +20,144 @@
 </script>
 
 <div class="images-tab">
-  <h3>Images</h3>
+  <Card padding="md">
+    <h3 class="section-title">Images</h3>
 
-  <div
-    class="upload-area"
-    role="button"
-    tabindex="0"
-    on:click={() => fileInput.click()}
-    on:keydown={(e) => (e.key === 'Enter' || e.key === ' ') && fileInput.click()}
-  >
-    <div class="upload-icon">
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        width="24"
-        height="24"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        stroke-width="2"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-        ><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"
-        ></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg
-      >
-    </div>
-    <span>Click to Upload Images</span>
-    <p class="upload-hint">or paste them anywhere</p>
-    <input
-      type="file"
-      accept="image/*"
-      multiple
-      bind:this={fileInput}
-      on:change={handleFileUpload}
-      hidden
-    />
-  </div>
-
-  <div class="image-list">
-    {#each $standees as item}
-      <div class="thumb-wrapper">
-        <button
-          class="image-thumb"
-          class:selected={$uiState.selectedStandeeId === item.id}
-          on:click={() => selectStandee(item.id)}
-          title="Edit this standee"
+    <div
+      class="upload-area"
+      role="button"
+      tabindex="0"
+      on:click={() => fileInput.click()}
+      on:keydown={(e) => (e.key === 'Enter' || e.key === ' ') && fileInput.click()}
+    >
+      <div class="upload-icon">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          ><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline
+            points="17 8 12 3 7 8"
+          ></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg
         >
-          <img src={item.imageSrc} alt="thumbnail" />
-        </button>
-        <button
-          class="remove-btn"
-          on:click|stopPropagation={() => dispatch('remove', item.id)}
-          title="Remove standee"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="14"
-            height="14"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="3"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            ><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"
-            ></line></svg
-          >
-        </button>
       </div>
-    {/each}
-  </div>
+      <span class="upload-text">Click to Upload Images</span>
+      <p class="upload-hint">or paste them anywhere</p>
+      <input
+        type="file"
+        accept="image/*"
+        multiple
+        bind:this={fileInput}
+        on:change={handleFileUpload}
+        hidden
+      />
+    </div>
+
+    {#if $standees.length === 0}
+      <div class="empty-state">
+        <p>No images uploaded yet.</p>
+      </div>
+    {:else}
+      <div class="image-list">
+        {#each $standees as item (item.id)}
+          <div class="thumb-wrapper">
+            <button
+              class="image-thumb"
+              class:selected={$uiState.selectedStandeeId === item.id}
+              on:click={() => selectStandee(item.id)}
+              title="Edit this standee"
+            >
+              <img src={item.imageSrc} alt="thumbnail" />
+            </button>
+            <button
+              class="remove-btn"
+              on:click|stopPropagation={() => dispatch('remove', item.id)}
+              title="Remove standee"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="14"
+                height="14"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="3"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                ><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"
+                ></line></svg
+              >
+            </button>
+          </div>
+        {/each}
+      </div>
+    {/if}
+  </Card>
 </div>
 
 <style>
+  .images-tab {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+  }
+
+  .section-title {
+    margin: 0 0 var(--space-4) 0;
+    font-size: var(--font-size-lg);
+    font-weight: var(--font-weight-medium);
+    color: var(--color-text);
+  }
+
   .upload-area {
-    border: 2px dashed #ccc;
-    padding: 1.5rem;
+    border: 2px dashed var(--color-border);
+    padding: var(--space-5);
     text-align: center;
-    border-radius: 8px;
+    border-radius: var(--radius-lg);
     cursor: pointer;
-    transition: all 0.2s;
-    background: #fafafa;
-    margin-bottom: 1.5rem;
+    transition: all var(--transition-fast);
+    background: var(--color-bg);
+    margin-bottom: var(--space-4);
   }
 
   .upload-area:hover {
-    border-color: var(--primary-color);
-    background: rgba(100, 108, 255, 0.05);
+    border-color: var(--color-primary);
+    background: rgba(100, 108, 255, 0.05); /* Keep slight opacity for hover */
   }
 
   .upload-icon {
-    margin-bottom: 8px;
-    color: #999;
+    margin-bottom: var(--space-2);
+    color: var(--color-text-light);
+  }
+
+  .upload-text {
+    font-weight: var(--font-weight-medium);
+    color: var(--color-text);
   }
 
   .upload-hint {
-    font-size: 0.75rem;
-    color: #999;
-    margin: 4px 0 0 0;
+    font-size: var(--font-size-sm);
+    color: var(--color-text-muted);
+    margin: var(--space-1) 0 0 0;
   }
 
   .image-list {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 8px;
+    gap: var(--space-2);
+  }
+
+  .empty-state {
+    text-align: center;
+    color: var(--color-text-muted);
+    padding: var(--space-4);
+    font-size: var(--font-size-sm);
+    font-style: italic;
   }
 
   .thumb-wrapper {
@@ -131,35 +167,34 @@
   .image-thumb {
     aspect-ratio: 1;
     border: 2px solid transparent;
-    border-radius: 6px;
+    border-radius: var(--radius-md);
     overflow: hidden;
     padding: 0;
-    background: #f0f0f0;
+    background: var(--color-surface);
     cursor: pointer;
-    transition: all 0.2s;
+    transition: all var(--transition-fast);
     width: 100%;
+    display: block;
   }
 
   .remove-btn {
     position: absolute;
-    top: -5px;
-    right: -5px;
-    width: 20px;
-    height: 20px;
+    top: -6px;
+    right: -6px;
+    width: 22px;
+    height: 22px;
     border-radius: 50%;
-    background: #ff4444;
-    color: white;
-    border: 2px solid white;
+    background: var(--color-danger);
+    color: var(--color-danger-text);
+    border: 2px solid var(--color-surface);
     display: flex;
     align-items: center;
     justify-content: center;
     padding: 0;
     cursor: pointer;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    box-shadow: var(--shadow-sm);
     opacity: 0;
-    transition:
-      opacity 0.2s,
-      transform 0.2s;
+    transition: all var(--transition-fast);
     z-index: 10;
   }
 
@@ -168,17 +203,17 @@
   }
 
   .remove-btn:hover {
-    background: #ff2222;
+    background: var(--color-danger-hover);
     transform: scale(1.1);
   }
 
   .image-thumb:hover {
-    transform: scale(1.05);
-    border-color: #ddd;
+    transform: scale(1.02);
+    border-color: var(--color-border-hover);
   }
 
   .image-thumb.selected {
-    border-color: var(--primary-color);
+    border-color: var(--color-primary);
     box-shadow: 0 0 0 2px rgba(100, 108, 255, 0.2);
   }
 

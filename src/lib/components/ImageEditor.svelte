@@ -4,6 +4,8 @@
   import { removeBackground } from '@imgly/background-removal';
   import { createEventDispatcher, onMount, onDestroy } from 'svelte';
 
+  import Button from '../ui/Button.svelte';
+
   export let imageSrc: string;
   export let initialImageSrc: string | undefined = undefined;
 
@@ -13,7 +15,13 @@
   let cropper: Cropper;
   let processedImageSrc: string | null = null;
   let isProcessing = false;
-  let sessionStartSrc = imageSrc;
+  // ... (omitted unchanged script lines)
+  // I will just replace the import and the template part, leaving the rest of script invalid if I cut it off?
+  // Be careful. replace_file_content needs EXACT TargetContent.
+  // I will split this into steps:
+  // 1. Add import.
+  // 2. Replace template.
+  // 3. Remove CSS.
 
   // Initialize Cropper
   function initCropper() {
@@ -200,65 +208,65 @@
     <div class="controls">
       <div class="ai-actions">
         <div class="btn-group">
-          <button
-            class="secondary"
+          <Button
+            variant="secondary"
             on:click={handleRemoveBackground}
             disabled={isProcessing}
             title="Remove background using AI"
           >
             Remove BG
-          </button>
-          <button
-            class="secondary"
+          </Button>
+          <Button
+            variant="secondary"
             on:click={handleSolidify}
             disabled={isProcessing || !processedImageSrc}
             title="Make semi-transparent areas solid (fixes AI errors)"
           >
             Solidify
-          </button>
+          </Button>
         </div>
 
         <div class="btn-group">
-          <button
-            class="secondary"
+          <Button
+            variant="secondary"
             on:click={resetCrop}
             disabled={isProcessing}
             title="Reset crop selection to full image"
           >
             Reset Crop
-          </button>
-          <button
-            class="secondary primary-action"
+          </Button>
+          <Button
+            variant="primary"
             on:click={handleCrop}
             disabled={isProcessing}
             title="Apply crop to the current image"
           >
             Crop
-          </button>
-          <button
-            class="secondary reset-btn"
+          </Button>
+          <Button
+            variant="danger"
             on:click={resetSession}
             disabled={isProcessing || !processedImageSrc}
             title="Undo background and solidification edits"
           >
             Reset Edits
-          </button>
+          </Button>
           {#if initialImageSrc && activeSrc !== initialImageSrc}
-            <button
-              class="secondary reset-btn"
+            <Button
+              variant="danger"
               on:click={fullRestore}
               disabled={isProcessing}
               title="Restore to original uploaded file"
             >
               Restore Original
-            </button>
+            </Button>
           {/if}
         </div>
       </div>
 
       <div class="actions">
-        <button class="secondary" on:click={handleCancel} disabled={isProcessing}>Cancel</button>
-        <button class="primary" on:click={handleApply} disabled={isProcessing}>Save</button>
+        <Button variant="ghost" on:click={handleCancel} disabled={isProcessing}>Cancel</Button>
+        <Button variant="primary" on:click={handleApply} disabled={isProcessing}>Save</Button>
       </div>
     </div>
   </div>
@@ -334,55 +342,14 @@
     display: flex;
     gap: 4px;
     padding: 4px;
-    background: #f5f5f5;
-    border-radius: 6px;
-  }
-
-  .reset-btn {
-    color: #cc0000;
-  }
-
-  .primary-action {
-    background: #eef4ff;
-    color: #2b6cb0;
-    font-weight: 600;
-  }
-
-  .primary-action:hover {
-    background: #e2ecff;
-  }
-
-  .reset-btn:hover {
-    background: #ffeeee;
+    background: var(--color-surface-hover);
+    border-radius: var(--radius-md);
   }
 
   .actions {
     display: flex;
     gap: 10px;
     margin-left: auto;
-  }
-
-  button {
-    padding: 0.5rem 1rem;
-    border-radius: 4px;
-    cursor: pointer;
-    font-weight: 500;
-    border: none;
-  }
-
-  button.primary {
-    background: var(--primary-color, #4a90e2);
-    color: white;
-  }
-
-  button.secondary {
-    background: #eee;
-    color: #333;
-  }
-
-  button:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
   }
 
   .loading {

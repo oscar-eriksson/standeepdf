@@ -1,14 +1,11 @@
 <script lang="ts">
   import type { Standee, StandeeInstance } from '../stores/store';
   import { mmToPx, pxToMm } from '../utils/units';
-  import { createEventDispatcher } from 'svelte';
-  import { standees, uiState } from '../stores/store';
+  import { standees } from '../stores/store';
 
   export let standee: Standee;
   export let instance: StandeeInstance;
   export let showRuler: boolean = false;
-
-  const dispatch = createEventDispatcher();
 
   // Dimensions in pixels
   $: heightPx = mmToPx(standee.height);
@@ -153,7 +150,7 @@
         on:mousedown={(e) => handleTokenMouseDown(e, instance)}
         on:keydown={(e) => {
           if (e.key === 'Enter' || e.key === ' ') {
-            handleTokenMouseDown(e as any, instance);
+            handleTokenMouseDown(e as unknown as MouseEvent, instance);
           }
         }}
         style="
@@ -239,15 +236,18 @@
 
   .standee-wrapper {
     position: absolute;
-    border: 1px dashed #ccc; /* Thin border at the margin (cut line) */
+    border: 1px dashed var(--color-border); /* Thin border at the margin (cut line) */
     display: flex;
     flex-direction: column;
     user-select: none;
     cursor: default;
+    background: white; /* Ensure white background even in dark mode */
+    z-index: 60; /* Ensure visual priority over page breaks (z=50) */
   }
 
   .standee-wrapper:active {
     outline: none;
+    z-index: 70; /* Lift when active */
   }
 
   .standee-half {
@@ -296,7 +296,7 @@
   .fold-line {
     width: 100%;
     height: 1px;
-    border-top: 1px dashed #999;
+    border-top: 1px dashed var(--color-text-light);
   }
 
   .token-overlay {

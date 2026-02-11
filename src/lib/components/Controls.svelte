@@ -108,7 +108,7 @@
 
   $: selectedStandee = $standees.find((s) => s.id === $uiState.selectedStandeeId);
 
-  function updateStandee(prop: string, value: any) {
+  function updateStandee(prop: string, value: string | number | boolean) {
     if (!selectedStandee) return;
     standees.update((all) => {
       const updated = all.map((s) => (s.id === selectedStandee!.id ? { ...s, [prop]: value } : s));
@@ -141,7 +141,7 @@
     });
   }
 
-  function updateTokenStyle(prop: string, value: any) {
+  function updateTokenStyle(prop: string, value: string | number) {
     if (!selectedStandee) return;
     standees.update((all) =>
       all.map((s) => {
@@ -337,30 +337,24 @@
 <style>
   .controls-panel {
     width: 320px;
-    background: var(--panel-bg);
-    border-right: 1px solid var(--border-color);
+    background: var(--color-surface);
+    border-right: 1px solid var(--color-border);
     display: flex;
     flex-direction: column;
     height: 100vh;
   }
 
   .tab-content {
-    padding: 1.5rem;
+    padding: var(--space-5);
     overflow-y: auto;
     flex: 1;
+    background-color: var(--color-bg);
   }
 
   .empty-state {
     text-align: center;
-    padding: 2rem;
-    color: #999;
-    font-size: 0.9rem;
-  }
-
-  .empty-state {
-    text-align: center;
-    padding: 2rem;
-    color: #999;
-    font-size: 0.9rem;
+    padding: var(--space-6);
+    color: var(--color-text-light);
+    font-size: var(--font-size-sm);
   }
 </style>

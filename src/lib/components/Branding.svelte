@@ -13,8 +13,8 @@
     align-items: center;
     gap: 10px;
     padding: 1rem;
-    border-bottom: 1px solid var(--border-color);
-    background: #f8f9fa;
+    border-bottom: 1px solid var(--color-border);
+    background: var(--color-bg);
   }
 
   .branding img {
@@ -27,6 +27,6 @@
     font-size: 1rem;
     font-weight: 600;
     margin: 0;
-    color: #333;
+    color: var(--color-text);
   }
 </style>

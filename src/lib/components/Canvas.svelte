@@ -1,10 +1,7 @@
 <script lang="ts">
   import { paperSettings, standees, uiState } from '../stores/store';
-  import { onMount } from 'svelte';
   import { mmToPx } from '../utils/units';
   import Standee from './Standee.svelte';
-
-  let canvasContainer: HTMLDivElement;
 
   $: widthPx = mmToPx($paperSettings.width);
   $: heightPx = mmToPx($paperSettings.height);
@@ -46,7 +43,7 @@
   >
     <!-- Render Page Breaks -->
     {#if numPages > 1}
-      {#each Array(numPages - 1) as _, i}
+      {#each Array(numPages - 1) as _, i (i)}
         <div class="page-break" style="top: {(i + 1) * heightPx}px; width: {widthPx}px;">
           <span>Page {i + 2}</span>
         </div>
@@ -55,7 +52,7 @@
 
     <!-- Printer Margins Overlay (Repeated for each page? Or just one big one?) -->
     <!-- Ideally we show margins per page. -->
-    {#each Array(numPages) as _, i}
+    {#each Array(numPages) as _, i (i)}
       <div
         class="printable-area"
         style="
@@ -63,7 +60,7 @@
                 top: {i * heightPx + marginTopPx}px;
                 width: {widthPx - marginLeftPx - marginRightPx}px;
                 height: {heightPx - marginTopPx - marginBottomPx}px;
-                border: {$paperSettings.gridEnabled ? '1px dashed #ccc' : 'none'};
+                border: {$paperSettings.gridEnabled ? '1px dashed var(--color-border)' : 'none'};
             "
       ></div>
     {/each}
@@ -90,7 +87,7 @@
 <style>
   .canvas-viewport {
     flex: 1;
-    background-color: #333;
+    background-color: #333; /* Keep dark for contrast with paper */
     overflow: auto;
     display: flex;
     justify-content: center;
@@ -102,9 +99,9 @@
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
     position: relative;
     transition:
-      width 0.2s,
-      height 0.2s,
-      transform 0.2s;
+      width var(--transition-normal),
+      height var(--transition-normal),
+      transform var(--transition-normal);
   }
 
   .printable-area {
@@ -117,20 +114,22 @@
   .page-break {
     position: absolute;
     left: 0;
-    border-top: 2px dashed #ccc;
+    border-top: 1px dashed var(--color-border);
     height: 0;
     pointer-events: none;
     display: flex;
     justify-content: flex-end;
+    align-items: center;
+    z-index: 50;
   }
 
   .page-break span {
-    background: #ccc;
-    color: #666;
+    background: var(--color-surface);
+    color: var(--color-text);
+    border: 1px solid var(--color-border);
     font-size: 0.8rem;
-    padding: 2px 6px;
-    margin-top: -10px;
-    margin-right: 10px;
-    border-radius: 4px;
+    padding: 2px 8px;
+    margin-right: 16px;
+    border-radius: 12px;
   }
 </style>
