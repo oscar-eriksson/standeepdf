@@ -1,16 +1,70 @@
 <script lang="ts">
   import { standees, uiState } from '../stores/store';
-  import { createEventDispatcher } from 'svelte';
+  import { createEventDispatcher, onMount, onDestroy } from 'svelte';
 
   import Card from '../ui/Card.svelte';
   const dispatch = createEventDispatcher();
   let fileInput: HTMLInputElement;
+  let dragging = false;
+  let dragCounter = 0;
+
+  // Prevent browser from opening dropped files
+  function preventDefaults(e: Event) {
+    e.preventDefault();
+  }
+
+  onMount(() => {
+    window.addEventListener('dragover', preventDefaults);
+    window.addEventListener('drop', preventDefaults);
+  });
+
+  onDestroy(() => {
+    window.removeEventListener('dragover', preventDefaults);
+    window.removeEventListener('drop', preventDefaults);
+  });
 
   function handleFileUpload(e: Event) {
     const target = e.target as HTMLInputElement;
     if (target.files) {
       dispatch('upload', Array.from(target.files));
       target.value = ''; // Reset for same file upload
+    }
+  }
+
+  function handleDrop(e: DragEvent) {
+    e.preventDefault();
+    e.stopPropagation();
+    dragCounter = 0;
+    dragging = false;
+    if (e.dataTransfer?.files?.length) {
+      const imageFiles = Array.from(e.dataTransfer.files).filter((f) =>
+        f.type.startsWith('image/'),
+      );
+      if (imageFiles.length) {
+        dispatch('upload', imageFiles);
+      }
+    }
+  }
+
+  function handleDragEnter(e: DragEvent) {
+    e.preventDefault();
+    dragCounter++;
+    dragging = true;
+  }
+
+  function handleDragOver(e: DragEvent) {
+    e.preventDefault();
+    if (e.dataTransfer) {
+      e.dataTransfer.dropEffect = 'copy';
+    }
+  }
+
+  function handleDragLeave(e: DragEvent) {
+    e.preventDefault();
+    dragCounter--;
+    if (dragCounter <= 0) {
+      dragCounter = 0;
+      dragging = false;
     }
   }
 
@@ -25,10 +79,15 @@
 
     <div
       class="upload-area"
+      class:drag-over={dragging}
       role="button"
       tabindex="0"
       on:click={() => fileInput.click()}
       on:keydown={(e) => (e.key === 'Enter' || e.key === ' ') && fileInput.click()}
+      on:drop={handleDrop}
+      on:dragenter={handleDragEnter}
+      on:dragover={handleDragOver}
+      on:dragleave={handleDragLeave}
     >
       <div class="upload-icon">
         <svg
@@ -46,8 +105,8 @@
           ></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg
         >
       </div>
-      <span class="upload-text">Click to Upload Images</span>
-      <p class="upload-hint">or paste them anywhere</p>
+      <span class="upload-text">{dragging ? 'Drop images here' : 'Click to Upload Images'}</span>
+      <p class="upload-hint">or drag & drop / paste them anywhere</p>
       <input
         type="file"
         accept="image/*"
@@ -125,9 +184,16 @@
     margin-bottom: var(--space-4);
   }
 
-  .upload-area:hover {
+  .upload-area:hover,
+  .upload-area.drag-over {
     border-color: var(--color-primary);
-    background: rgba(100, 108, 255, 0.05); /* Keep slight opacity for hover */
+    background: rgba(100, 108, 255, 0.05);
+  }
+
+  .upload-area.drag-over {
+    border-color: var(--color-primary);
+    background: rgba(100, 108, 255, 0.1);
+    border-style: solid;
   }
 
   .upload-icon {

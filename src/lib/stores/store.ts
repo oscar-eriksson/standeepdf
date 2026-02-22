@@ -70,11 +70,9 @@ const initialUIState: UIState = {
 
 // Persistence Keys
 const STORAGE_KEY_PAPER = 'standeeApp_paperSettings';
-const STORAGE_KEY_STANDEES = 'standeeApp_standees';
 
 // Load from Storage or use Initial
 const storedPaper = localStorage.getItem(STORAGE_KEY_PAPER);
-const storedStandees = localStorage.getItem(STORAGE_KEY_STANDEES);
 
 const startPaperSettings: PaperSettings = storedPaper
   ? (() => {
@@ -86,21 +84,18 @@ const startPaperSettings: PaperSettings = storedPaper
       return parsed;
     })()
   : initialPaperSettings;
-const startStandees: Standee[] = storedStandees ? JSON.parse(storedStandees) : [];
 
 export const paperSettings = writable<PaperSettings>(startPaperSettings);
-export const standees = writable<Standee[]>(startStandees);
+export const standees = writable<Standee[]>([]);
 export const uiState = writable<UIState>(initialUIState);
 
-// Subscribe to save changes
+// Persist paper settings only (small data)
 paperSettings.subscribe((val) => {
   if (typeof window !== 'undefined') {
-    localStorage.setItem(STORAGE_KEY_PAPER, JSON.stringify(val));
-  }
-});
-
-standees.subscribe((val) => {
-  if (typeof window !== 'undefined') {
-    localStorage.setItem(STORAGE_KEY_STANDEES, JSON.stringify(val));
+    try {
+      localStorage.setItem(STORAGE_KEY_PAPER, JSON.stringify(val));
+    } catch (e) {
+      console.warn('Failed to persist paper settings:', e);
+    }
   }
 });

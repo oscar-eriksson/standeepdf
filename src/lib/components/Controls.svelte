@@ -250,6 +250,43 @@
     }
   }
 
+  function saveProject() {
+    const name = prompt('Project file name:', 'standees');
+    if (!name) return;
+    const data = JSON.stringify($standees, null, 2);
+    const blob = new Blob([data], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `${name}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+  }
+
+  function loadProject() {
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = '.json';
+    input.onchange = (e) => {
+      const file = (e.target as HTMLInputElement).files?.[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = (ev) => {
+        try {
+          const data = JSON.parse(ev.target?.result as string);
+          if (Array.isArray(data)) {
+            standees.set(autoLayout(data, $paperSettings));
+            uiState.update((s) => ({ ...s, activeTab: 'images' }));
+          }
+        } catch {
+          alert('Invalid project file.');
+        }
+      };
+      reader.readAsText(file);
+    };
+    input.click();
+  }
+
   function calculateEfficiency(
     standees: import('../stores/store').Standee[],
     paper: import('../stores/store').PaperSettings,
@@ -327,7 +364,12 @@
         </div>
       {/if}
     {:else if $uiState.activeTab === 'export'}
-      <ExportTab {isGenerating} onExport={handleExport} />
+      <ExportTab
+        {isGenerating}
+        onExport={handleExport}
+        onSaveProject={saveProject}
+        onLoadProject={loadProject}
+      />
     {/if}
   </div>
 

@@ -4,6 +4,8 @@
 
   export let isGenerating: boolean;
   export let onExport: (action: 'download' | 'print') => void;
+  export let onSaveProject: () => void;
+  export let onLoadProject: () => void;
 </script>
 
 <div class="export-tab">
@@ -28,6 +30,18 @@
         <span>Preparing PDF document...</span>
       </div>
     {/if}
+  </Card>
+
+  <Card padding="md">
+    <h3 class="section-title">Project Data</h3>
+    <p class="export-note">Save or load your standee images and settings as a file.</p>
+
+    <div class="control-group">
+      <div class="grid-2">
+        <Button variant="primary" on:click={onSaveProject}>Save</Button>
+        <Button variant="secondary" on:click={onLoadProject}>Load</Button>
+      </div>
+    </div>
   </Card>
 </div>
 
