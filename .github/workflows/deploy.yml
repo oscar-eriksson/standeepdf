@@ -37,7 +37,7 @@ jobs:
         run: pnpm build
 
       - name: Deploy to Cloudflare Pages
-        run: pnpm exec wrangler pages deploy dist --project-name=standeepdf
+        run: pnpm exec wrangler pages deploy dist --project-name=standee2pdf
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
