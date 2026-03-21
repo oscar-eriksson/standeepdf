@@ -1,6 +1,8 @@
 import { jsPDF } from 'jspdf';
-import type { Standee, PaperSettings } from '../stores/store';
-import { pxToMm } from './units'; // Actually we need mm values for PDF
+import type { Standee, PaperSettings, StandeeInstance } from '../stores/store';
+
+type Token = NonNullable<StandeeInstance['token']>;
+// Actually we need mm values for PDF
 
 export async function generatePDF(
   standees: Standee[],
@@ -90,23 +92,27 @@ export async function generatePDF(
       const totalHeight = heightMm * 2 + imageMarginMm * 2 + feetMarginMm;
 
       // Main Cut Line (Dashed)
-      doc.setDrawColor(200, 200, 200);
-      doc.setLineDashPattern([2, 2], 0);
+      doc.setDrawColor(150, 150, 150); // Darker gray for visibility
+      doc.setLineDashPattern([2, 1], 0); // Tighter dash
       doc.rect(x, y, totalWidth, totalHeight);
 
-      // Feet Lines (Solid) - The boundary between image and fold area
-      doc.setLineDashPattern([], 0); // Solid
-      doc.line(x, foldTopY, x + totalWidth, foldTopY);
+      // Feet Lines & Fold Guide
+      doc.setDrawColor(150, 150, 150);
+      doc.setLineDashPattern([1, 1], 0); // Very fine dash for fold areas
+
       if (feetMarginMm > 0) {
+        // Boundary lines between image and fold area
+        doc.line(x, foldTopY, x + totalWidth, foldTopY);
         doc.line(x, foldBottomY, x + totalWidth, foldBottomY);
 
-        // Center Fold Line (Dashed)
+        // Center Fold Line (More prominent dashed line)
         const centerFoldY = foldTopY + feetMarginMm / 2;
         doc.setLineDashPattern([2, 2], 0);
         doc.line(x, centerFoldY, x + totalWidth, centerFoldY);
       } else {
-        // If no feet margin, the solid line above is effectively the fold line.
-        // But usually there is a margin.
+        // If no feet margin, just draw the single center fold line
+        doc.setLineDashPattern([2, 2], 0);
+        doc.line(x, foldTopY, x + totalWidth, foldTopY);
       }
 
       // 4. Token
@@ -217,7 +223,7 @@ function getFlippedImageDataUrl(img: HTMLImageElement): string {
   return canvas.toDataURL();
 }
 
-async function createTokenImage(token: any): Promise<{ normal: string; rotated: string }> {
+async function createTokenImage(token: Token): Promise<{ normal: string; rotated: string }> {
   // High res canvas for crisp text
   const size = 64; // px
   const radius = size / 2;

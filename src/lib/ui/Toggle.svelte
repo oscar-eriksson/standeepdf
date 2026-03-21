@@ -43,22 +43,31 @@
   .toggle-wrapper {
     display: flex;
     flex-direction: column;
-    gap: var(--space-2);
+    gap: 0.5rem;
   }
 
   .label {
-    font-size: var(--font-size-sm);
-    font-weight: var(--font-weight-medium);
-    color: var(--color-text-muted);
+    display: block;
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--color-slate-500);
+    margin-bottom: 0.25rem;
   }
 
   .toggle-container {
     display: flex;
-    background: var(--color-bg);
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-md);
-    padding: 2px;
-    gap: 2px;
+    background: var(--color-slate-950);
+    border: 2px solid var(--color-slate-800);
+    border-radius: 1.25rem;
+    padding: 0.25rem;
+    gap: 0.25rem;
+    transition: all 0.2s;
+  }
+
+  .toggle-container:hover {
+    border-color: var(--color-slate-700);
   }
 
   .toggle-option {
@@ -66,32 +75,41 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: var(--space-2);
-    padding: var(--space-2);
+    gap: 0.5rem;
+    padding: 0.625rem 1rem;
     border: none;
-    border-radius: var(--radius-sm);
+    border-radius: 1rem;
     background: transparent;
-    color: var(--color-text-muted);
-    font-size: var(--font-size-sm);
-    font-weight: var(--font-weight-medium);
+    color: var(--color-slate-500);
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.025em;
     cursor: pointer;
-    transition: all var(--transition-fast);
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
   .toggle-option:hover:not(.selected) {
-    background: rgba(0, 0, 0, 0.03);
-    color: var(--color-text);
+    color: var(--color-slate-300);
+    background: var(--color-slate-900);
   }
 
   .toggle-option.selected {
-    background: var(--color-surface);
-    color: var(--color-primary);
-    box-shadow: var(--shadow-sm);
-    font-weight: var(--font-weight-bold);
+    background: var(--color-slate-800);
+    color: white;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
   }
 
+  /* Specifically for the paper orientation toggle which might use icons */
   .icon {
     display: flex;
     align-items: center;
+    opacity: 0.6;
+    transition: opacity 0.2s;
+  }
+
+  .toggle-option.selected .icon {
+    opacity: 1;
+    color: var(--color-primary);
   }
 </style>

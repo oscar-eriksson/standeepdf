@@ -90,33 +90,34 @@
   .setup-tab {
     display: flex;
     flex-direction: column;
-    gap: var(--space-4);
+    gap: 1rem;
   }
 
   .section-title {
-    margin: 0 0 var(--space-4) 0;
-    font-size: var(--font-size-lg);
-    font-weight: var(--font-weight-medium);
-    color: var(--color-text);
+    margin: 0 0 1rem 0;
+    font-size: 10px;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--color-slate-400);
   }
 
   .spacer {
-    height: var(--space-2);
+    height: 0.5rem;
   }
 
-  /* Custom overrides for specific layouts not covered by components yet */
   .checkbox-group {
-    margin-bottom: var(--space-4);
+    margin-bottom: 1rem;
   }
 
   .checkbox-label {
     display: flex;
     align-items: center;
-    gap: var(--space-2);
+    gap: 0.75rem;
     cursor: pointer;
-    font-size: var(--font-size-sm);
-    font-weight: var(--font-weight-medium);
-    color: var(--color-text);
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--color-slate-300);
   }
 
   .range-slider {

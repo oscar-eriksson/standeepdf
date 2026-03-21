@@ -86,35 +86,33 @@
 
 <style>
   .canvas-viewport {
-    flex: 1;
-    background-color: #333; /* Keep dark for contrast with paper */
-    overflow: auto;
+    width: 100%;
+    min-height: 100%;
     display: flex;
     justify-content: center;
-    padding: 2rem;
+    align-items: flex-start; /* Default to start for scrollability */
+    padding: 3rem;
+    box-sizing: border-box;
   }
 
   .paper-sheet {
     background-color: white;
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
     position: relative;
-    transition:
-      width var(--transition-normal),
-      height var(--transition-normal),
-      transform var(--transition-normal);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    margin: auto; /* This centers it vertically if there is space */
+    flex-shrink: 0;
   }
 
   .printable-area {
     position: absolute;
-    /* Optional: hatch pattern for margins outside this area could be on parent */
-    pointer-events: none; /* Let clicks pass through if empty */
-    /* border: 1px dashed red; debug */
+    pointer-events: none;
   }
 
   .page-break {
     position: absolute;
     left: 0;
-    border-top: 1px dashed var(--color-border);
+    border-top: 1px dashed var(--color-slate-300);
     height: 0;
     pointer-events: none;
     display: flex;
@@ -124,12 +122,15 @@
   }
 
   .page-break span {
-    background: var(--color-surface);
-    color: var(--color-text);
-    border: 1px solid var(--color-border);
-    font-size: 0.8rem;
-    padding: 2px 8px;
-    margin-right: 16px;
-    border-radius: 12px;
+    background: var(--color-slate-900);
+    color: var(--color-slate-400);
+    border: 1px solid var(--color-slate-800);
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    padding: 4px 12px;
+    margin-right: 24px;
+    border-radius: 2rem;
   }
 </style>

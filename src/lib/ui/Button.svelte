@@ -1,13 +1,27 @@
 <script lang="ts">
-  export let type: 'button' | 'submit' | 'reset' = 'button';
-  export let variant: 'primary' | 'secondary' | 'danger' | 'ghost' = 'primary';
-  export let size: 'sm' | 'md' | 'lg' = 'md';
-  export let disabled: boolean = false;
-  export let title: string = '';
+  let {
+    type = 'button',
+    variant = 'primary',
+    size = 'md',
+    disabled = false,
+    title = '',
+    onclick,
+    children,
+  } = $props<{
+    type?: 'button' | 'submit' | 'reset';
+    variant?: 'primary' | 'secondary' | 'danger' | 'ghost';
+    size?: 'sm' | 'md' | 'lg';
+    disabled?: boolean;
+    title?: string;
+    onclick?: (e: MouseEvent) => void;
+    children?: import('svelte').Snippet;
+  }>();
 </script>
 
-<button {type} class="btn {variant} {size}" {disabled} {title} on:click>
-  <slot />
+<button {type} class="btn {variant} {size}" {disabled} {title} {onclick}>
+  {#if children}
+    {@render children()}
+  {/if}
 </button>
 
 <style>
@@ -15,75 +29,92 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    border: 1px solid transparent;
-    border-radius: var(--radius-md);
+    border: 2px solid transparent;
+    border-radius: 1.25rem;
     font-family: inherit;
-    font-weight: var(--font-weight-medium);
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
     cursor: pointer;
-    transition: all var(--transition-fast);
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
     line-height: 1;
-    gap: var(--space-2);
+    gap: 0.5rem;
+    position: relative;
+    overflow: hidden;
   }
 
   .btn:focus {
     outline: none;
-    box-shadow: 0 0 0 3px rgba(100, 108, 255, 0.3);
+    box-shadow: 0 0 0 4px rgba(139, 92, 246, 0.2);
   }
 
   .btn:disabled {
-    opacity: 0.6;
+    opacity: 0.4;
     cursor: not-allowed;
+    transform: none !important;
   }
 
   /* Sizes */
   .sm {
-    padding: var(--space-1) var(--space-2);
-    font-size: var(--font-size-sm);
+    padding: 0.625rem 1.25rem;
+    font-size: 10px;
   }
 
   .md {
-    padding: var(--space-2) var(--space-4);
-    font-size: var(--font-size-sm);
+    padding: 0.875rem 1.75rem;
+    font-size: 12px;
   }
 
   .lg {
-    padding: var(--space-3) var(--space-5);
-    font-size: var(--font-size-base);
+    padding: 1.125rem 2.25rem;
+    font-size: 14px;
   }
 
   /* Variants */
   .primary {
-    background-color: var(--color-primary);
-    color: var(--color-primary-text);
+    background: linear-gradient(135deg, var(--color-purple-600), var(--color-pink-600));
+    color: white;
+    box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
+    border: none;
   }
   .primary:hover:not(:disabled) {
-    background-color: var(--color-primary-hover);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(139, 92, 246, 0.4);
+    filter: brightness(1.1);
+  }
+  .primary:active:not(:disabled) {
+    transform: translateY(0);
   }
 
   .secondary {
-    background-color: var(--color-surface);
-    color: var(--color-text);
-    border-color: var(--color-border);
+    background-color: var(--color-slate-900);
+    color: var(--color-slate-200);
+    border-color: var(--color-slate-800);
   }
   .secondary:hover:not(:disabled) {
-    background-color: var(--color-surface-hover);
-    border-color: var(--color-border-hover);
+    background-color: var(--color-slate-800);
+    border-color: var(--color-slate-700);
+    color: white;
+    transform: translateY(-1px);
   }
 
   .danger {
-    background-color: var(--color-danger);
-    color: var(--color-danger-text);
+    background-color: var(--color-rose-600);
+    color: white;
+    box-shadow: 0 4px 12px rgba(225, 29, 72, 0.2);
   }
   .danger:hover:not(:disabled) {
-    background-color: var(--color-danger-hover);
+    background-color: var(--color-rose-500);
+    transform: translateY(-1px);
   }
 
   .ghost {
     background-color: transparent;
-    color: var(--color-text-muted);
+    color: var(--color-slate-500);
+    border-color: transparent;
   }
   .ghost:hover:not(:disabled) {
-    background-color: rgba(0, 0, 0, 0.05);
-    color: var(--color-text);
+    background-color: var(--color-slate-900);
+    color: var(--color-slate-200);
   }
 </style>

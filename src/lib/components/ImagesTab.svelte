@@ -163,104 +163,108 @@
   .images-tab {
     display: flex;
     flex-direction: column;
-    gap: var(--space-4);
+    gap: 1rem;
   }
 
   .section-title {
-    margin: 0 0 var(--space-4) 0;
-    font-size: var(--font-size-lg);
-    font-weight: var(--font-weight-medium);
-    color: var(--color-text);
+    margin: 0 0 1rem 0;
+    font-size: 10px;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--color-slate-400);
   }
 
   .upload-area {
-    border: 2px dashed var(--color-border);
-    padding: var(--space-5);
+    border: 2px dashed var(--color-slate-800);
+    padding: 2rem;
     text-align: center;
-    border-radius: var(--radius-lg);
+    border-radius: 1.5rem;
     cursor: pointer;
-    transition: all var(--transition-fast);
-    background: var(--color-bg);
-    margin-bottom: var(--space-4);
+    transition: all 0.2s;
+    background: color-mix(in srgb, var(--color-slate-950), transparent 50%);
+    margin-bottom: 1.5rem;
   }
 
   .upload-area:hover,
   .upload-area.drag-over {
     border-color: var(--color-primary);
-    background: rgba(100, 108, 255, 0.05);
-  }
-
-  .upload-area.drag-over {
-    border-color: var(--color-primary);
-    background: rgba(100, 108, 255, 0.1);
-    border-style: solid;
+    background: var(--color-slate-900);
   }
 
   .upload-icon {
-    margin-bottom: var(--space-2);
-    color: var(--color-text-light);
+    margin-bottom: 0.5rem;
+    color: var(--color-slate-600);
   }
 
   .upload-text {
-    font-weight: var(--font-weight-medium);
-    color: var(--color-text);
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--color-slate-200);
   }
 
   .upload-hint {
-    font-size: var(--font-size-sm);
-    color: var(--color-text-muted);
-    margin: var(--space-1) 0 0 0;
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--color-slate-500);
+    margin: 0.25rem 0 0 0;
   }
 
   .image-list {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: var(--space-2);
+    gap: 0.5rem;
   }
 
   .empty-state {
     text-align: center;
-    color: var(--color-text-muted);
-    padding: var(--space-4);
-    font-size: var(--font-size-sm);
+    color: var(--color-slate-600);
+    padding: 1.5rem;
+    font-size: 11px;
     font-style: italic;
   }
 
   .thumb-wrapper {
     position: relative;
+    transition: transform 0.2s;
+  }
+
+  .thumb-wrapper:hover {
+    transform: scale(1.05) rotate(1deg);
   }
 
   .image-thumb {
     aspect-ratio: 1;
     border: 2px solid transparent;
-    border-radius: var(--radius-md);
+    border-radius: 0.75rem;
     overflow: hidden;
     padding: 0;
-    background: var(--color-surface);
+    background: var(--color-slate-900);
     cursor: pointer;
-    transition: all var(--transition-fast);
+    transition: all 0.2s;
     width: 100%;
     display: block;
   }
 
   .remove-btn {
     position: absolute;
-    top: -6px;
-    right: -6px;
-    width: 22px;
-    height: 22px;
+    top: -4px;
+    right: -4px;
+    width: 20px;
+    height: 20px;
     border-radius: 50%;
-    background: var(--color-danger);
-    color: var(--color-danger-text);
-    border: 2px solid var(--color-surface);
+    background: var(--color-rose-600);
+    color: white;
+    border: 2px solid var(--color-slate-900);
     display: flex;
     align-items: center;
     justify-content: center;
     padding: 0;
     cursor: pointer;
-    box-shadow: var(--shadow-sm);
     opacity: 0;
-    transition: all var(--transition-fast);
+    transition: all 0.2s;
     z-index: 10;
   }
 
@@ -268,19 +272,9 @@
     opacity: 1;
   }
 
-  .remove-btn:hover {
-    background: var(--color-danger-hover);
-    transform: scale(1.1);
-  }
-
-  .image-thumb:hover {
-    transform: scale(1.02);
-    border-color: var(--color-border-hover);
-  }
-
   .image-thumb.selected {
     border-color: var(--color-primary);
-    box-shadow: 0 0 0 2px rgba(100, 108, 255, 0.2);
+    box-shadow: 0 0 0 4px rgba(139, 92, 246, 0.2);
   }
 
   .image-thumb img {

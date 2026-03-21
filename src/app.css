@@ -1,152 +1,80 @@
-@import './theme.css';
+@import "tailwindcss";
 
 :root {
-  font-family: var(--font-family);
-  line-height: 1.5;
-  font-weight: var(--font-weight-regular);
+  --color-slate-50: #f8fafc;
+  --color-slate-100: #f1f5f9;
+  --color-slate-200: #e2e8f0;
+  --color-slate-300: #cbd5e1;
+  --color-slate-400: #94a3b8;
+  --color-slate-500: #64748b;
+  --color-slate-600: #475569;
+  --color-slate-700: #334155;
+  --color-slate-800: #1e293b;
+  --color-slate-900: #0f172a;
+  --color-slate-950: #020617;
 
-  color-scheme: light dark;
-  color: var(--color-text);
+  --color-purple-500: #8b5cf6;
+  --color-purple-600: #7c3aed;
+  --color-pink-500: #ec4899;
+  --color-pink-600: #db2777;
+
+  --color-bg: var(--color-slate-950);
+  --color-surface: var(--color-slate-900);
+  --color-border: var(--color-slate-800);
+  --color-text: var(--color-slate-100);
+  --color-text-muted: var(--color-slate-400);
+  --color-primary: var(--color-purple-600);
+  --color-primary-hover: var(--color-purple-500);
+
   background-color: var(--color-bg);
-
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  color: var(--color-text);
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
 }
 
 body {
   margin: 0;
-  display: flex;
-  place-items: center;
-  min-width: 320px;
   min-height: 100vh;
   background-color: var(--color-bg);
   color: var(--color-text);
+  -webkit-font-smoothing: antialiased;
 }
 
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
-}
-
-button {
-  border-radius: var(--radius-md);
-  border: 1px solid var(--color-border);
-  padding: 0.5rem 1rem;
-  font-size: var(--font-size-sm);
-  font-weight: var(--font-weight-medium);
-  font-family: inherit;
-  background-color: var(--color-surface);
-  color: var(--color-text);
-  cursor: pointer;
-  transition: all var(--transition-fast);
-}
-
-
-button:hover {
-  border-color: var(--color-primary);
-  background-color: var(--color-surface);
-}
-
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
-  outline-color: var(--color-primary);
-  outline-offset: 2px;
-}
-
-@media (prefers-color-scheme: light) {
-  :root {
-    color: var(--color-text);
-    background-color: var(--color-bg);
-  }
-
-  a:hover {
-    color: var(--color-primary-hover);
-  }
-
-  button {
-    background-color: var(--color-surface);
-  }
-}
-
-/* Shared UI Utilities */
-.control-group {
-  margin-bottom: var(--space-5);
-}
-
-.control-label {
+/* Premium Typography & Elements */
+label, .control-label {
   display: block;
-  margin-bottom: var(--space-2);
-  font-size: var(--font-size-sm);
-  font-weight: var(--font-weight-medium);
-  color: var(--color-text-muted);
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--color-slate-500);
+  margin-bottom: 0.5rem;
 }
 
-.grid-2 {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: var(--space-3);
-}
-
-.efficiency-stat {
-  font-size: 0.75em;
-  opacity: 0.8;
-  margin-top: var(--space-1);
-}
-
-input[type='number'],
-input[type='text'],
+input[type="text"],
+input[type="number"],
 select {
   width: 100%;
-  padding: 0.6rem;
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-md);
-  background: var(--color-surface);
-  color: var(--color-text);
-  font-size: var(--font-size-sm);
-  transition: border-color var(--transition-fast);
+  background: var(--color-slate-900);
+  border: 1px solid var(--color-slate-800);
+  color: var(--color-slate-100);
+  padding: 0.6rem 0.8rem;
+  border-radius: 0.75rem;
+  font-size: 0.875rem;
+  transition: all 0.2s;
 }
 
-input:focus,
-select:focus {
+input:focus, select:focus {
   outline: none;
   border-color: var(--color-primary);
-  box-shadow: 0 0 0 2px rgba(100, 108, 255, 0.2);
+  box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.1);
 }
 
 button {
-  padding: 0.6rem 1rem;
-  font-size: var(--font-size-sm);
-  border-radius: var(--radius-md);
-  transition: all var(--transition-fast);
+  cursor: pointer;
+  transition: all 0.2s;
 }
 
-button.primary {
-  background-color: var(--color-primary);
-  color: var(--color-primary-text);
-  border-color: var(--color-primary);
-}
-
-button.primary:hover {
-  background-color: var(--color-primary-hover);
-  border-color: var(--color-primary-hover);
-}
-
-button.danger {
-  background-color: var(--color-danger);
-  color: var(--color-danger-text);
-  border-color: var(--color-danger);
-}
-
-button.danger:hover {
-  background-color: var(--color-danger-hover);
-  border-color: var(--color-danger-hover);
-}
-
-.sub-controls {
-  margin-top: var(--space-3);
-  padding-left: var(--space-4);
-  border-left: 2px solid var(--color-border);
+/* Ensure canvas and controls look good on dark */
+canvas {
+  background: var(--color-slate-950) !important;
 }

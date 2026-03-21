@@ -236,7 +236,7 @@
 
   .standee-wrapper {
     position: absolute;
-    border: 1px dashed var(--color-border); /* Thin border at the margin (cut line) */
+    border: 1px dashed color-mix(in srgb, var(--color-border); ), transparent * Thin border at the margin (cut line%) */
     display: flex;
     flex-direction: column;
     user-select: none;

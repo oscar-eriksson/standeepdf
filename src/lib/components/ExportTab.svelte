@@ -15,10 +15,10 @@
 
     <div class="control-group">
       <div class="grid-2">
-        <Button variant="primary" on:click={() => onExport('print')} disabled={isGenerating}>
+        <Button variant="primary" onclick={() => onExport('print')} disabled={isGenerating}>
           {isGenerating ? 'Generating...' : 'Open'}
         </Button>
-        <Button variant="secondary" on:click={() => onExport('download')} disabled={isGenerating}>
+        <Button variant="secondary" onclick={() => onExport('download')} disabled={isGenerating}>
           {isGenerating ? 'Generating...' : 'Download'}
         </Button>
       </div>
@@ -38,8 +38,8 @@
 
     <div class="control-group">
       <div class="grid-2">
-        <Button variant="primary" on:click={onSaveProject}>Save</Button>
-        <Button variant="secondary" on:click={onLoadProject}>Load</Button>
+        <Button variant="primary" onclick={onSaveProject}>Save</Button>
+        <Button variant="secondary" onclick={onLoadProject}>Load</Button>
       </div>
     </div>
   </Card>
@@ -49,45 +49,56 @@
   .export-tab {
     display: flex;
     flex-direction: column;
-    gap: var(--space-4);
+    gap: 1rem;
   }
 
   .section-title {
-    margin: 0 0 var(--space-2) 0;
-    font-size: var(--font-size-lg);
-    font-weight: var(--font-weight-medium);
-    color: var(--color-text);
+    margin: 0 0 0.5rem 0;
+    font-size: 10px;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--color-slate-400);
   }
 
   .export-note {
-    font-size: var(--font-size-sm);
-    color: var(--color-text-muted);
-    margin: 0 0 var(--space-5) 0;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--color-slate-500);
+    margin: 0 0 1.5rem 0;
   }
 
   .loading-indicator {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: var(--space-3);
-    margin-top: var(--space-6);
+    gap: 1rem;
+    margin-top: 2rem;
     color: var(--color-primary);
-    font-size: var(--font-size-sm);
-    font-weight: var(--font-weight-medium);
+    font-size: 10px;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
   }
 
   .spinner {
-    width: 24px;
-    height: 24px;
-    border: 3px solid rgba(100, 108, 255, 0.1);
+    width: 32px;
+    height: 32px;
+    border: 4px solid var(--color-slate-800);
     border-top-color: var(--color-primary);
     border-radius: 50%;
-    animation: spin 0.8s linear infinite;
+    animation: spin 0.8s cubic-bezier(0.4, 0, 0.2, 1) infinite;
   }
 
   @keyframes spin {
     to {
       transform: rotate(360deg);
     }
+  }
+
+  .grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.5rem;
   }
 </style>

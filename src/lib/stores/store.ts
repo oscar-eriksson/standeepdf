@@ -50,6 +50,7 @@ export interface UIState {
   activeTab: 'setup' | 'images' | 'controls' | 'export';
   selectedStandeeId: string | null;
   zoomLevel: number; // 1 = 100%
+  page: 'home' | 'guide';
 }
 
 // Initial Settings
@@ -66,6 +67,7 @@ const initialUIState: UIState = {
   activeTab: 'setup',
   selectedStandeeId: null,
   zoomLevel: 1,
+  page: 'home',
 };
 
 // Persistence Keys

@@ -41,14 +41,18 @@
   .select-wrapper {
     display: flex;
     flex-direction: column;
-    gap: var(--space-1);
+    gap: 0.5rem;
     width: 100%;
   }
 
   .label {
-    font-size: var(--font-size-sm);
-    font-weight: var(--font-weight-medium);
-    color: var(--color-text-muted);
+    display: block;
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--color-slate-500);
+    margin-bottom: 0.25rem;
   }
 
   .select-container {
@@ -58,17 +62,18 @@
 
   select {
     width: 100%;
-    padding: var(--space-2) var(--space-3);
-    padding-right: var(--space-6);
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-md);
-    background: var(--color-surface);
-    color: var(--color-text);
-    font-size: var(--font-size-sm);
+    padding: 0.75rem 1rem;
+    padding-right: 2.5rem;
+    background: var(--color-slate-900);
+    border: 2px solid var(--color-slate-800);
+    color: var(--color-slate-100);
+    border-radius: 1.25rem;
+    font-size: 0.875rem;
+    font-weight: 500;
     font-family: inherit;
     appearance: none;
     -webkit-appearance: none;
-    transition: all var(--transition-fast);
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
     cursor: pointer;
     box-sizing: border-box;
   }
@@ -76,23 +81,35 @@
   select:focus {
     outline: none;
     border-color: var(--color-primary);
-    box-shadow: 0 0 0 3px rgba(100, 108, 255, 0.1);
+    background: color-mix(in srgb, var(--color-primary), transparent 95%);
+    box-shadow: 0 0 0 4px rgba(139, 92, 246, 0.1);
+    transform: translateY(-1px);
+  }
+
+  select:hover:not(:focus):not(:disabled) {
+    border-color: var(--color-slate-700);
+    background: var(--color-slate-800);
   }
 
   select:disabled {
-    background-color: var(--color-bg);
+    opacity: 0.5;
     cursor: not-allowed;
-    opacity: 0.7;
+    background: var(--color-slate-950);
   }
 
   .chevron {
     position: absolute;
-    right: var(--space-2);
+    right: 1rem;
     top: 50%;
     transform: translateY(-50%);
     pointer-events: none;
-    color: var(--color-text-muted);
+    color: var(--color-slate-500);
     display: flex;
     align-items: center;
+    transition: color 0.2s;
+  }
+
+  .select-container:hover .chevron {
+    color: var(--color-slate-300);
   }
 </style>

@@ -5,9 +5,7 @@
   import { generatePDF } from '../utils/export';
 
   import ImageEditor from './ImageEditor.svelte';
-  import Branding from './Branding.svelte';
   import Tabs from './Tabs.svelte';
-  import Footer from './Footer.svelte';
   import SetupTab from './SetupTab.svelte';
   import ImagesTab from './ImagesTab.svelte';
   import ControlsTab from './ControlsTab.svelte';
@@ -333,8 +331,6 @@
 {/if}
 
 <div class="controls-panel">
-  <Branding />
-
   <Tabs {tabs} activeTab={$uiState.activeTab} on:select={(e) => setActiveTab(e.detail)} />
 
   <div class="tab-content">
@@ -372,31 +368,30 @@
       />
     {/if}
   </div>
-
-  <Footer />
 </div>
 
 <style>
   .controls-panel {
-    width: 320px;
-    background: var(--color-surface);
-    border-right: 1px solid var(--color-border);
+    width: 100%;
+    background: color-mix(in srgb, var(--color-slate-900), transparent 50%);
+    backdrop-filter: blur(16px);
+    border: 1px solid var(--color-slate-800);
+    border-radius: 1.5rem;
     display: flex;
     flex-direction: column;
-    height: 100vh;
+    overflow: hidden;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
   }
 
   .tab-content {
-    padding: var(--space-5);
-    overflow-y: auto;
+    padding: 1.5rem;
     flex: 1;
-    background-color: var(--color-bg);
   }
 
   .empty-state {
     text-align: center;
-    padding: var(--space-6);
-    color: var(--color-text-light);
-    font-size: var(--font-size-sm);
+    padding: 2rem;
+    color: var(--color-slate-500);
+    font-size: 0.875rem;
   }
 </style>
