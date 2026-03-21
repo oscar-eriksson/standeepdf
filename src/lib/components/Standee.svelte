@@ -78,12 +78,13 @@
 
   function updateRulerOffset(newOffset: number) {
     const isHorizontal = standee.rulerOrientation === 'horizontal';
-    const maxDim = isHorizontal ? pxToMm(totalHeightPx) : pxToMm(totalWidthPx);
     const rulerThicknessMm = pxToMm(25); // Ruler thickness is 25px in CSS
-    const constrainedOffset = Math.max(
-      -10,
-      Math.min(newOffset, maxDim - (isHorizontal ? 0 : rulerThicknessMm)),
-    );
+    // Clamp to keep ruler fully within the standee bounds
+    const minOffset = 0;
+    const maxOffset = isHorizontal
+      ? pxToMm(totalHeightPx) - rulerThicknessMm
+      : pxToMm(totalWidthPx) - rulerThicknessMm;
+    const constrainedOffset = Math.max(minOffset, Math.min(newOffset, maxOffset));
 
     standees.update((all) =>
       all.map((s) => {
@@ -99,7 +100,7 @@
     e.stopPropagation();
     const isHorizontal = standee.rulerOrientation === 'horizontal';
     const startPos = isHorizontal ? e.clientY : e.clientX;
-    const initialOffset = standee.rulerOffset ?? (isHorizontal ? 0 : -5);
+    const initialOffset = standee.rulerOffset ?? (isHorizontal ? 10 : 5);
 
     function onMouseMove(e: MouseEvent) {
       const currentPos = isHorizontal ? e.clientY : e.clientX;
@@ -202,20 +203,18 @@
       on:mousedown={handleRulerMouseDown}
       on:keydown={(e) => {
         if (standee.rulerOrientation === 'horizontal') {
-          if (e.key === 'ArrowUp') updateRulerOffset((standee.rulerOffset || 0) - 1);
-          if (e.key === 'ArrowDown') updateRulerOffset((standee.rulerOffset || 0) + 1);
+          if (e.key === 'ArrowUp') updateRulerOffset((standee.rulerOffset ?? 10) - 1);
+          if (e.key === 'ArrowDown') updateRulerOffset((standee.rulerOffset ?? 10) + 1);
         } else {
-          if (e.key === 'ArrowLeft') updateRulerOffset((standee.rulerOffset || -5) - 1);
-          if (e.key === 'ArrowRight') updateRulerOffset((standee.rulerOffset || -5) + 1);
+          if (e.key === 'ArrowLeft') updateRulerOffset((standee.rulerOffset ?? 5) - 1);
+          if (e.key === 'ArrowRight') updateRulerOffset((standee.rulerOffset ?? 5) + 1);
         }
       }}
       style="
         {standee.rulerOrientation === 'horizontal'
-        ? `width: ${standee.rulerFullWidth ? totalWidthPx : widthPx}px; height: 25px; top: ${mmToPx(standee.rulerOffset || 10)}px; left: ${standee.rulerFullWidth ? 0 : imageMarginPx}px; cursor: ns-resize;`
-        : `height: ${heightPx}px; bottom: ${heightPx + feetMarginPx + imageMarginPx}px; left: ${mmToPx(standee.rulerOffset || -10)}px; cursor: ew-resize;`}
-        background: {standee.rulerOrientation === 'horizontal'
-        ? `linear-gradient(to bottom, transparent ${Math.max(0, -mmToPx(standee.rulerOffset || 10))}px, rgba(255, 255, 255, 0.6) ${Math.max(0, -mmToPx(standee.rulerOffset || 10))}px)`
-        : `linear-gradient(to right, transparent ${Math.max(0, -mmToPx(standee.rulerOffset || -10))}px, rgba(255, 255, 255, 0.6) ${Math.max(0, -mmToPx(standee.rulerOffset || -10))}px)`};
+        ? `width: ${standee.rulerFullWidth ? totalWidthPx : widthPx}px; height: 25px; top: ${mmToPx(standee.rulerOffset ?? 10)}px; left: ${standee.rulerFullWidth ? 0 : imageMarginPx}px; cursor: ns-resize;`
+        : `width: 25px; height: ${heightPx}px; top: ${imageMarginPx}px; left: ${mmToPx(standee.rulerOffset ?? 5)}px; cursor: ew-resize;`}
+        background: rgba(255,255,255,0);
       "
     >
       <div class="ruler-line"></div>
@@ -236,13 +235,14 @@
 
   .standee-wrapper {
     position: absolute;
-    border: 1px dashed color-mix(in srgb, var(--color-border); ), transparent * Thin border at the margin (cut line%) */
+    border: 1px dashed color-mix(in srgb, var(--color-border), transparent 50%); /* Thin border at the margin (cut line) */
     display: flex;
     flex-direction: column;
     user-select: none;
     cursor: default;
     background: white; /* Ensure white background even in dark mode */
     z-index: 60; /* Ensure visual priority over page breaks (z=50) */
+    overflow: hidden; /* Confine ruler and other absolute children */
   }
 
   .standee-wrapper:active {
@@ -337,6 +337,7 @@
     width: 25px;
     flex-direction: column;
     justify-content: center;
+    align-items: flex-end;
   }
 
   .visual-ruler.horizontal {

@@ -139,7 +139,7 @@
     });
   }
 
-  function updateTokenStyle(prop: string, value: string | number) {
+  function updateTokenStyle(prop: string, value: any) {
     if (!selectedStandee) return;
     standees.update((all) =>
       all.map((s) => {
@@ -373,14 +373,15 @@
 <style>
   .controls-panel {
     width: 100%;
-    background: color-mix(in srgb, var(--color-slate-900), transparent 50%);
-    backdrop-filter: blur(16px);
+    background: color-mix(in srgb, var(--color-slate-900), transparent 20%);
+    backdrop-filter: blur(24px);
     border: 1px solid var(--color-slate-800);
-    border-radius: 1.5rem;
+    border-radius: 2rem;
     display: flex;
     flex-direction: column;
     overflow: hidden;
-    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+    box-shadow: var(--shadow-premium);
+    transition: var(--transition-normal);
   }
 
   .tab-content {

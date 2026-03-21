@@ -10,7 +10,7 @@
   export let onToggleToken: (enabled: boolean) => void;
   export let onUpdateTokenSettings: (mode: 'numeric' | 'alphabetic', startValue: string) => void;
   export let onUpdateTokenPosition: (axis: 'x' | 'y', value: number) => void;
-  export let onUpdateTokenStyle: (prop: string, value: string | number | boolean) => void;
+  export let onUpdateTokenStyle: (prop: string, value: any) => void;
 </script>
 
 <div class="controls-tab">
@@ -160,98 +160,118 @@
   .controls-tab {
     display: flex;
     flex-direction: column;
-    gap: 1.5rem;
+    gap: 2rem;
   }
 
   h3 {
     margin: 0;
-    font-size: 10px;
-    font-weight: 900;
+    font-size: 11px;
+    font-weight: 800;
     text-transform: uppercase;
-    letter-spacing: 0.1em;
+    letter-spacing: 0.15em;
     color: var(--color-slate-400);
+    border-bottom: 1px solid var(--color-slate-800);
+    padding-bottom: 0.75rem;
   }
 
   .control-group {
     display: flex;
     flex-direction: column;
-    gap: 0.5rem;
+    gap: 0.75rem;
+    padding: 1rem;
+    background: rgba(15, 23, 42, 0.2);
+    border-radius: 1.5rem;
+    border: 1px solid var(--color-slate-800);
+    transition: var(--transition-normal);
+  }
+
+  .control-group:hover {
+    border-color: var(--color-slate-700);
+    background: rgba(15, 23, 42, 0.4);
+    box-shadow: var(--shadow-md);
   }
 
   .grid-2 {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 0.5rem;
+    gap: 0.75rem;
   }
 
   .btn-group {
     display: flex;
-    gap: 2px;
-    background: var(--color-slate-800);
-    border: 2px solid var(--color-slate-800);
-    border-radius: 1rem;
+    gap: 4px;
+    background: var(--color-slate-950);
+    border: 1px solid var(--color-slate-800);
+    border-radius: 1.25rem;
     overflow: hidden;
-    padding: 2px;
+    padding: 0.25rem;
   }
 
   .btn-toggle {
     flex: 1;
-    background: var(--color-slate-950);
+    background: transparent;
     color: var(--color-slate-500);
     border: none;
     padding: 0.625rem;
     font-size: 10px;
-    font-weight: 800;
+    font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.05em;
     cursor: pointer;
-    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-    border-radius: 0.75rem;
+    transition: var(--transition-normal);
+    border-radius: 1rem;
   }
 
   .btn-toggle:hover:not(.selected) {
-    background: var(--color-slate-800);
+    background: var(--color-slate-900);
     color: var(--color-slate-300);
   }
 
   .btn-toggle.selected {
     background: var(--color-slate-800);
     color: white;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    box-shadow: var(--shadow-sm);
+    text-shadow: 0 0 8px rgba(255, 255, 255, 0.2);
   }
 
   button {
     background: var(--color-slate-900);
-    color: var(--color-slate-200);
-    border: 2px solid var(--color-slate-800);
+    color: var(--color-slate-300);
+    border: 1px solid var(--color-slate-800);
     border-radius: 1.25rem;
-    padding: 0.75rem 1rem;
+    padding: 0.75rem 1.25rem;
     font-size: 11px;
-    font-weight: 800;
+    font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.05em;
-    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: var(--transition-normal);
     cursor: pointer;
+    box-shadow: var(--shadow-sm);
   }
 
   button:hover:not(.danger):not(.selected) {
     background: var(--color-slate-800);
-    border-color: var(--color-slate-700);
+    border-color: var(--color-slate-600);
     color: white;
-    transform: translateY(-1px);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+  }
+
+  button:active {
+    transform: translateY(0);
   }
 
   button.danger {
-    background: rgba(225, 29, 72, 0.1);
-    border-color: rgba(225, 29, 72, 0.2);
-    color: #fb7185;
+    background: rgba(225, 29, 72, 0.05);
+    border-color: rgba(224, 29, 72, 0.2);
+    color: #fda4af;
   }
 
   button.danger:hover {
-    background: var(--color-rose-600);
-    border-color: var(--color-rose-600);
+    background: var(--color-danger);
+    border-color: var(--color-danger);
     color: white;
-    transform: translateY(-1px);
-    box-shadow: 0 8px 20px rgba(225, 29, 72, 0.3);
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px -5px rgba(225, 29, 72, 0.4);
   }
 </style>

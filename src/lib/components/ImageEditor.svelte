@@ -210,7 +210,7 @@
         <div class="btn-group">
           <Button
             variant="secondary"
-            on:click={handleRemoveBackground}
+            onclick={handleRemoveBackground}
             disabled={isProcessing}
             title="Remove background using AI"
           >
@@ -218,7 +218,7 @@
           </Button>
           <Button
             variant="secondary"
-            on:click={handleSolidify}
+            onclick={handleSolidify}
             disabled={isProcessing || !processedImageSrc}
             title="Make semi-transparent areas solid (fixes AI errors)"
           >
@@ -229,7 +229,7 @@
         <div class="btn-group">
           <Button
             variant="secondary"
-            on:click={resetCrop}
+            onclick={resetCrop}
             disabled={isProcessing}
             title="Reset crop selection to full image"
           >
@@ -237,7 +237,7 @@
           </Button>
           <Button
             variant="primary"
-            on:click={handleCrop}
+            onclick={handleCrop}
             disabled={isProcessing}
             title="Apply crop to the current image"
           >
@@ -245,7 +245,7 @@
           </Button>
           <Button
             variant="danger"
-            on:click={resetSession}
+            onclick={resetSession}
             disabled={isProcessing || !processedImageSrc}
             title="Undo background and solidification edits"
           >
@@ -254,7 +254,7 @@
           {#if initialImageSrc && activeSrc !== initialImageSrc}
             <Button
               variant="danger"
-              on:click={fullRestore}
+              onclick={fullRestore}
               disabled={isProcessing}
               title="Restore to original uploaded file"
             >
@@ -265,8 +265,8 @@
       </div>
 
       <div class="actions">
-        <Button variant="ghost" on:click={handleCancel} disabled={isProcessing}>Cancel</Button>
-        <Button variant="primary" on:click={handleApply} disabled={isProcessing}>Save</Button>
+        <Button variant="ghost" onclick={handleCancel} disabled={isProcessing}>Cancel</Button>
+        <Button variant="primary" onclick={handleApply} disabled={isProcessing}>Save</Button>
       </div>
     </div>
   </div>
@@ -287,19 +287,26 @@
   }
 
   .editor-modal {
-    background: white;
-    padding: 1rem;
-    border-radius: 8px;
+    background: var(--color-slate-900);
+    border: 1px solid var(--color-slate-800);
+    padding: 1.5rem;
+    border-radius: 1rem;
     width: 90%;
     max-width: 800px;
     max-height: 90vh;
     display: flex;
     flex-direction: column;
     gap: 1rem;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.6);
   }
 
   h3 {
     margin: 0;
+    font-size: 12px;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--color-slate-400);
   }
 
   .crop-container {

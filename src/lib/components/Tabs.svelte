@@ -23,28 +23,29 @@
 <style>
   .tabs {
     display: flex;
-    border-bottom: 2px solid var(--color-slate-800);
+    border-bottom: 1px solid var(--color-slate-800);
     background: rgba(15, 23, 42, 0.4);
-    padding: 0 1rem;
-    gap: 1.5rem;
+    padding: 0 1.25rem;
+    gap: 1.25rem;
   }
 
   .tabs button {
     position: relative;
     background: transparent;
     border: none;
-    font-size: 10px;
-    font-weight: 800;
+    font-size: 11px;
+    font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.1em;
     padding: 1.25rem 0.5rem;
     color: var(--color-slate-500);
-    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: var(--transition-normal);
     cursor: pointer;
   }
 
   .tabs button:hover {
-    color: var(--color-slate-300);
+    color: var(--color-slate-200);
+    transform: translateY(-1px);
   }
 
   .tabs button:focus {
@@ -53,12 +54,13 @@
 
   .tabs button.active {
     color: white;
+    text-shadow: 0 0 12px rgba(255, 255, 255, 0.3);
   }
 
   .tabs button::after {
     content: '';
     position: absolute;
-    bottom: -2px;
+    bottom: -1px;
     left: 0;
     width: 100%;
     height: 3px;
@@ -66,12 +68,12 @@
     border-radius: 99px 99px 0 0;
     opacity: 0;
     transform: scaleX(0.5);
-    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: var(--transition-normal);
   }
 
   .tabs button.active::after {
     opacity: 1;
     transform: scaleX(1);
-    box-shadow: 0 -4px 12px rgba(139, 92, 246, 0.5);
+    box-shadow: 0 -4px 15px rgba(139, 92, 246, 0.6);
   }
 </style>
